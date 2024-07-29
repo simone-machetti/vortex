@@ -1,6 +1,9 @@
 `ifndef VX_CONFIG
 `define VX_CONFIG
 
+`define EXT_M_DISABLE
+`define EXT_F_DISABLE
+
 `ifndef XLEN
 `define XLEN 32
 `endif
@@ -14,7 +17,7 @@
 `endif
 
 `ifndef NUM_WARPS
-`define NUM_WARPS 4
+`define NUM_WARPS 2
 `endif
 
 `ifndef NUM_THREADS
@@ -34,7 +37,7 @@
 `endif
 
 `ifndef SM_ENABLE
-`define SM_ENABLE 1
+`define SM_ENABLE 0
 `endif
 
 `ifndef MEM_BLOCK_SIZE
@@ -46,7 +49,7 @@
 `endif
 
 `ifndef STARTUP_ADDR
-`define STARTUP_ADDR 32'h80000000
+`define STARTUP_ADDR 32'h00000000
 `endif
 
 `ifndef IO_BASE_ADDR
