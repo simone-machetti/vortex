@@ -11,7 +11,7 @@ module VX_popcount #(
 );
     `UNUSED_PARAM (MODEL)
 
-`ifndef SYNTHESIS
+`ifndef SEL_SYNTHESIS
     assign cnt_o = $countones(in_i);
 `else
 `ifdef QUARTUS
