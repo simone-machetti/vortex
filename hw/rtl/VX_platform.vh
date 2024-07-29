@@ -1,6 +1,8 @@
 `ifndef VX_PLATFORM
 `define VX_PLATFORM
 
+`define SEL_SYNTHESIS
+
 `ifndef SEL_SYNTHESIS
 `include "util_dpi.vh"
 `endif
