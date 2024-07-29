@@ -4,7 +4,7 @@
 module VX_popcount #(
     parameter MODEL = 1,
     parameter N     = 1,
-    parameter M     = $clog2(N+1) 
+    parameter M     = $clog2(N+1)
 ) (
     input  wire [N-1:0] in_i,
     output wire [M-1:0] cnt_o
@@ -25,14 +25,14 @@ module VX_popcount #(
     `IGNORE_WARNINGS_BEGIN
         localparam PN    = 1 << $clog2(N);
         localparam LOGPN = $clog2(PN);
-        
+
         wire [M-1:0] tmp [0:PN-1] [0:PN-1];
-        
-        for (genvar i = 0; i < N; ++i) begin        
+
+        for (genvar i = 0; i < N; ++i) begin
             assign tmp[0][i] = in_i[i];
         end
 
-        for (genvar i = N; i < PN; ++i) begin        
+        for (genvar i = N; i < PN; ++i) begin
             assign tmp[0][i] = '0;
         end
 
@@ -58,7 +58,7 @@ module VX_popcount #(
         end
 
         assign cnt_o = cnt_r;
-    
+
     end
 `endif
 `endif
