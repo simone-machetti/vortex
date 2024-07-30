@@ -22,7 +22,7 @@ module VX_csr_data #(
 `endif
 `ifdef EXT_TEX_ENABLE
     VX_tex_csr_if.master            tex_csr_if,
-`endif 
+`endif
 
     input wire                      read_enable,
     input wire [`UUID_BITS-1:0]     read_uuid,
@@ -30,28 +30,28 @@ module VX_csr_data #(
     input wire[`NW_BITS-1:0]        read_wid,
     output wire[31:0]               read_data,
 
-    input wire                      write_enable, 
+    input wire                      write_enable,
     input wire [`UUID_BITS-1:0]     write_uuid,
     input wire[`CSR_ADDR_BITS-1:0]  write_addr,
     input wire[`NW_BITS-1:0]        write_wid,
     input wire[31:0]                write_data,
-    
+
     input wire                      busy
 );
     import fpu_types::*;
-    
+
     reg [`CSR_WIDTH-1:0] csr_satp;
     reg [`CSR_WIDTH-1:0] csr_mstatus;
     reg [`CSR_WIDTH-1:0] csr_medeleg;
     reg [`CSR_WIDTH-1:0] csr_mideleg;
     reg [`CSR_WIDTH-1:0] csr_mie;
     reg [`CSR_WIDTH-1:0] csr_mtvec;
-    reg [`CSR_WIDTH-1:0] csr_mepc;    
+    reg [`CSR_WIDTH-1:0] csr_mepc;
     reg [`CSR_WIDTH-1:0] csr_pmpcfg [0:0];
     reg [`CSR_WIDTH-1:0] csr_pmpaddr [0:0];
     reg [63:0] csr_cycle;
     reg [63:0] csr_instret;
-    
+
     reg [`NUM_WARPS-1:0][`INST_FRM_BITS+`FFLAGS_BITS-1:0] fcsr;
 
     always @(posedge clk) begin
@@ -81,7 +81,7 @@ module VX_csr_data #(
                     default: begin
                     `ifdef EXT_TEX_ENABLE
                         `ASSERT((write_addr == `CSR_TEX_UNIT)
-                             || (write_addr >= `CSR_TEX_STATE_BEGIN 
+                             || (write_addr >= `CSR_TEX_STATE_BEGIN
                               && write_addr < `CSR_TEX_STATE_END),
                                 ("%t: *** invalid CSR write address: %0h (#%0d)", $time, write_addr, write_uuid));
                     `else
@@ -96,7 +96,7 @@ module VX_csr_data #(
     `UNUSED_VAR (write_data)
 
     // TEX CSRs
-`ifdef EXT_TEX_ENABLE    
+`ifdef EXT_TEX_ENABLE
     assign tex_csr_if.write_enable = write_enable;
     assign tex_csr_if.write_addr   = write_addr;
     assign tex_csr_if.write_data   = write_data;
@@ -128,9 +128,9 @@ module VX_csr_data #(
             `CSR_FRM        : read_data_r = 32'(fcsr[read_wid][`INST_FRM_BITS+`FFLAGS_BITS-1:`FFLAGS_BITS]);
             `CSR_FCSR       : read_data_r = 32'(fcsr[read_wid]);
 
-            `CSR_WTID       ,            
+            `CSR_WTID       ,
             `CSR_LTID       ,
-            `CSR_LWID       : read_data_r = 32'(read_wid);            
+            `CSR_LWID       : read_data_r = 32'(read_wid);
             `CSR_GTID       ,
             /*`CSR_MHARTID ,*/
             `CSR_GWID       : read_data_r = CORE_ID * `NUM_WARPS + 32'(read_wid);
@@ -141,12 +141,12 @@ module VX_csr_data #(
             `CSR_NT         : read_data_r = `NUM_THREADS;
             `CSR_NW         : read_data_r = `NUM_WARPS;
             `CSR_NC         : read_data_r = `NUM_CORES * `NUM_CLUSTERS;
-            
+
             `CSR_MCYCLE     : read_data_r = csr_cycle[31:0];
             `CSR_MCYCLE_H   : read_data_r = 32'(csr_cycle[`PERF_CTR_BITS-1:32]);
             `CSR_MINSTRET   : read_data_r = csr_instret[31:0];
             `CSR_MINSTRET_H : read_data_r = 32'(csr_instret[`PERF_CTR_BITS-1:32]);
-            
+
         `ifdef PERF_ENABLE
             // PERF: pipeline
             `CSR_MPM_IBUF_ST    : read_data_r = perf_pipeline_if.ibf_stalls[31:0];
@@ -159,10 +159,10 @@ module VX_csr_data #(
             `CSR_MPM_LSU_ST_H   : read_data_r = 32'(perf_pipeline_if.lsu_stalls[`PERF_CTR_BITS-1:32]);
             `CSR_MPM_CSR_ST     : read_data_r = perf_pipeline_if.csr_stalls[31:0];
             `CSR_MPM_CSR_ST_H   : read_data_r = 32'(perf_pipeline_if.csr_stalls[`PERF_CTR_BITS-1:32]);
-        `ifdef EXT_F_ENABLE    
+        `ifdef EXT_F_ENABLE
             `CSR_MPM_FPU_ST     : read_data_r = perf_pipeline_if.fpu_stalls[31:0];
             `CSR_MPM_FPU_ST_H   : read_data_r = 32'(perf_pipeline_if.fpu_stalls[`PERF_CTR_BITS-1:32]);
-        `else        
+        `else
             `CSR_MPM_FPU_ST     : read_data_r = '0;
             `CSR_MPM_FPU_ST_H   : read_data_r = '0;
         `endif
@@ -193,7 +193,7 @@ module VX_csr_data #(
             `CSR_MPM_DCACHE_BANK_ST_H   : read_data_r = 32'(perf_memsys_if.dcache_bank_stalls[`PERF_CTR_BITS-1:32]);
             `CSR_MPM_DCACHE_MSHR_ST     : read_data_r = perf_memsys_if.dcache_mshr_stalls[31:0];
             `CSR_MPM_DCACHE_MSHR_ST_H   : read_data_r = 32'(perf_memsys_if.dcache_mshr_stalls[`PERF_CTR_BITS-1:32]);
-            // PERF: smem          
+            // PERF: smem
             `CSR_MPM_SMEM_READS     : read_data_r = perf_memsys_if.smem_reads[31:0];
             `CSR_MPM_SMEM_READS_H   : read_data_r = 32'(perf_memsys_if.smem_reads[`PERF_CTR_BITS-1:32]);
             `CSR_MPM_SMEM_WRITES    : read_data_r = perf_memsys_if.smem_writes[31:0];
@@ -214,13 +214,13 @@ module VX_csr_data #(
             `CSR_MPM_TEX_LAT        : read_data_r = perf_tex_if.mem_latency[31:0];
             `CSR_MPM_TEX_LAT_H      : read_data_r = 32'(perf_tex_if.mem_latency[`PERF_CTR_BITS-1:32]);
         `endif
-            // PERF: reserved            
+            // PERF: reserved
             `CSR_MPM_RESERVED       : read_data_r = '0;
             `CSR_MPM_RESERVED_H     : read_data_r = '0;
         `endif
-            
+
             `CSR_SATP      : read_data_r = 32'(csr_satp);
-            
+
             `CSR_MSTATUS   : read_data_r = 32'(csr_mstatus);
             `CSR_MISA      : read_data_r = `ISA_CODE;
             `CSR_MEDELEG   : read_data_r = 32'(csr_medeleg);
@@ -232,7 +232,7 @@ module VX_csr_data #(
 
             `CSR_PMPCFG0   : read_data_r = 32'(csr_pmpcfg[0]);
             `CSR_PMPADDR0  : read_data_r = 32'(csr_pmpaddr[0]);
-            
+
             `CSR_MVENDORID : read_data_r = `VENDOR_ID;
             `CSR_MARCHID   : read_data_r = `ARCHITECTURE_ID;
             `CSR_MIMPID    : read_data_r = `IMPLEMENTATION_ID;
@@ -241,8 +241,8 @@ module VX_csr_data #(
                 if ((read_addr >= `CSR_MPM_BASE && read_addr < (`CSR_MPM_BASE + 32))
                  || (read_addr >= `CSR_MPM_BASE_H && read_addr < (`CSR_MPM_BASE_H + 32))) begin
                      read_addr_valid_r = 1;
-                end else     
-            `ifdef EXT_TEX_ENABLE    
+                end else
+            `ifdef EXT_TEX_ENABLE
                 if ((read_addr == `CSR_TEX_UNIT)
                  || (read_addr >= `CSR_TEX_STATE_BEGIN
                   && read_addr < `CSR_TEX_STATE_END)) begin
@@ -252,13 +252,13 @@ module VX_csr_data #(
                     read_addr_valid_r = 0;
             end
         endcase
-    end 
+    end
 
     `RUNTIME_ASSERT(~read_enable || read_addr_valid_r, ("%t: *** invalid CSR read address: %0h (#%0d)", $time, read_addr, read_uuid))
 
     assign read_data = read_data_r;
 
-`ifdef EXT_F_ENABLE    
+`ifdef EXT_F_ENABLE
     assign fpu_to_csr_if.read_frm = fcsr[fpu_to_csr_if.read_wid][`INST_FRM_BITS+`FFLAGS_BITS-1:`FFLAGS_BITS];
 `endif
 

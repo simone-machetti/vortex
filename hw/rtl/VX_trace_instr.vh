@@ -7,13 +7,13 @@ task trace_ex_type (
     input [`EX_BITS-1:0] ex_type
 );
     case (ex_type)
-        `EX_ALU: dpi_trace("ALU");     
+        `EX_ALU: dpi_trace("ALU");
         `EX_LSU: dpi_trace("LSU");
         `EX_CSR: dpi_trace("CSR");
         `EX_FPU: dpi_trace("FPU");
         `EX_GPU: dpi_trace("GPU");
         default: dpi_trace("NOP");
-    endcase  
+    endcase
 endtask
 
 task trace_ex_op (
@@ -21,7 +21,7 @@ task trace_ex_op (
   input [`INST_OP_BITS-1:0] op_type,
   input [`INST_MOD_BITS-1:0] op_mod
 );
-    case (ex_type)        
+    case (ex_type)
     `EX_ALU: begin
         if (`INST_ALU_IS_BR(op_mod)) begin
             case (`INST_BR_BITS'(op_type))
@@ -30,16 +30,16 @@ task trace_ex_op (
                 `INST_BR_LT:    dpi_trace("BLT");
                 `INST_BR_GE:    dpi_trace("BGE");
                 `INST_BR_LTU:   dpi_trace("BLTU");
-                `INST_BR_GEU:   dpi_trace("BGEU");           
+                `INST_BR_GEU:   dpi_trace("BGEU");
                 `INST_BR_JAL:   dpi_trace("JAL");
                 `INST_BR_JALR:  dpi_trace("JALR");
                 `INST_BR_ECALL: dpi_trace("ECALL");
-                `INST_BR_EBREAK:dpi_trace("EBREAK");    
-                `INST_BR_URET:  dpi_trace("URET");    
-                `INST_BR_SRET:  dpi_trace("SRET");    
-                `INST_BR_MRET:  dpi_trace("MRET");    
+                `INST_BR_EBREAK:dpi_trace("EBREAK");
+                `INST_BR_URET:  dpi_trace("URET");
+                `INST_BR_SRET:  dpi_trace("SRET");
+                `INST_BR_MRET:  dpi_trace("MRET");
                 default:   dpi_trace("?");
-            endcase                
+            endcase
         end else if (`INST_ALU_IS_MUL(op_mod)) begin
             case (`INST_MUL_BITS'(op_type))
                 `INST_MUL_MUL:   dpi_trace("MUL");
@@ -67,7 +67,7 @@ task trace_ex_op (
                 `INST_ALU_LUI:   dpi_trace("LUI");
                 `INST_ALU_AUIPC: dpi_trace("AUIPC");
                 default:    dpi_trace("?");
-            endcase         
+            endcase
         end
     end
     `EX_LSU: begin
@@ -108,7 +108,7 @@ task trace_ex_op (
             `INST_FPU_SQRT:  dpi_trace("SQRT");
             `INST_FPU_MADD:  dpi_trace("MADD");
             `INST_FPU_NMSUB: dpi_trace("NMSUB");
-            `INST_FPU_NMADD: dpi_trace("NMADD");                
+            `INST_FPU_NMADD: dpi_trace("NMADD");
             `INST_FPU_CVTWS: dpi_trace("CVTWS");
             `INST_FPU_CVTWUS:dpi_trace("CVTWUS");
             `INST_FPU_CVTSW: dpi_trace("CVTSW");
@@ -117,7 +117,7 @@ task trace_ex_op (
             `INST_FPU_CMP:   dpi_trace("CMP");
             `INST_FPU_MISC: begin
                 case (op_mod)
-                0: dpi_trace("SGNJ");   
+                0: dpi_trace("SGNJ");
                 1: dpi_trace("SGNJN");
                 2: dpi_trace("SGNJX");
                 3: dpi_trace("MIN");
@@ -125,7 +125,7 @@ task trace_ex_op (
                 5: dpi_trace("MVXW");
                 6: dpi_trace("MVWX");
                 endcase
-            end 
+            end
             default:    dpi_trace("?");
         endcase
     end
@@ -140,9 +140,9 @@ task trace_ex_op (
             `INST_GPU_TEX:   dpi_trace("TEX");
             default:    dpi_trace("?");
         endcase
-    end    
+    end
     default: dpi_trace("?");
-    endcase 
+    endcase
 endtask
 
 `endif

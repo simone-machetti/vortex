@@ -9,7 +9,7 @@ module VX_commit #(
     // inputs
     VX_commit_if.slave      alu_commit_if,
     VX_commit_if.slave      ld_commit_if,
-    VX_commit_if.slave      st_commit_if, 
+    VX_commit_if.slave      st_commit_if,
     VX_commit_if.slave      csr_commit_if,
 `ifdef EXT_F_ENABLE
     VX_commit_if.slave      fpu_commit_if,
@@ -50,7 +50,7 @@ module VX_commit #(
 
     assign commit_tmask = {
         {`NUM_THREADS{alu_commit_fire}} & alu_commit_if.tmask,
-        {`NUM_THREADS{ld_commit_fire}}  & ld_commit_if.tmask, 
+        {`NUM_THREADS{ld_commit_fire}}  & ld_commit_if.tmask,
         {`NUM_THREADS{st_commit_fire}}  & st_commit_if.tmask,
         {`NUM_THREADS{csr_commit_fire}} & csr_commit_if.tmask,
     `ifdef EXT_F_ENABLE
@@ -58,7 +58,7 @@ module VX_commit #(
     `endif
         {`NUM_THREADS{gpu_commit_fire}} & gpu_commit_if.tmask
     };
-    
+
     `POP_COUNT(commit_size, commit_tmask);
 
     VX_pipe_register #(
@@ -81,7 +81,7 @@ module VX_commit #(
         .reset          (reset),
 
         .alu_commit_if  (alu_commit_if),
-        .ld_commit_if   (ld_commit_if),        
+        .ld_commit_if   (ld_commit_if),
         .csr_commit_if  (csr_commit_if),
     `ifdef EXT_F_ENABLE
         .fpu_commit_if  (fpu_commit_if),
@@ -90,7 +90,7 @@ module VX_commit #(
         .writeback_if   (writeback_if)
     );
 
-    // store and gpu commits don't writeback  
+    // store and gpu commits don't writeback
     assign st_commit_if.ready  = 1'b1;
 
 `ifdef DBG_TRACE_CORE_PIPELINE
@@ -112,7 +112,7 @@ module VX_commit #(
              dpi_trace("%d: core%0d-commit: wid=%0d, PC=%0h, ex=CSR, tmask=%b, wb=%0d, rd=%0d, data=", $time, CORE_ID, csr_commit_if.wid, csr_commit_if.PC, csr_commit_if.tmask, csr_commit_if.wb, csr_commit_if.rd);
             `TRACE_ARRAY1D(csr_commit_if.data, `NUM_THREADS);
              dpi_trace(" (#%0d)\n", csr_commit_if.uuid);
-        end      
+        end
     `ifdef EXT_F_ENABLE
         if (fpu_commit_if.valid && fpu_commit_if.ready) begin
              dpi_trace("%d: core%0d-commit: wid=%0d, PC=%0h, ex=FPU, tmask=%b, wb=%0d, rd=%0d, data=", $time, CORE_ID, fpu_commit_if.wid, fpu_commit_if.PC, fpu_commit_if.tmask, fpu_commit_if.wb, fpu_commit_if.rd);
@@ -129,10 +129,3 @@ module VX_commit #(
 `endif
 
 endmodule
-
-
-
-
-
-
-

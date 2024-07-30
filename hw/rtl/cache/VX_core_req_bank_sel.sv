@@ -1,12 +1,12 @@
 `include "VX_cache_define.vh"
 
-module VX_core_req_bank_sel #(  
+module VX_core_req_bank_sel #(
     parameter CACHE_ID          = 0,
 
     // Size of line inside a bank in bytes
-    parameter CACHE_LINE_SIZE   = 64, 
+    parameter CACHE_LINE_SIZE   = 64,
     // Size of a word in bytes
-    parameter WORD_SIZE         = 4, 
+    parameter WORD_SIZE         = 4,
     // Number of banks
     parameter NUM_BANKS         = 4,
     // Number of ports per banks
@@ -35,11 +35,11 @@ module VX_core_req_bank_sel #(
 
     output wire [NUM_BANKS-1:0]                     per_bank_core_req_valid,
     output wire [NUM_BANKS-1:0][NUM_PORTS-1:0]      per_bank_core_req_pmask,
-    output wire [NUM_BANKS-1:0]                     per_bank_core_req_rw,  
+    output wire [NUM_BANKS-1:0]                     per_bank_core_req_rw,
     output wire [NUM_BANKS-1:0][`LINE_ADDR_WIDTH-1:0] per_bank_core_req_addr,
     output wire [NUM_BANKS-1:0][NUM_PORTS-1:0][`UP(`WORD_SELECT_BITS)-1:0] per_bank_core_req_wsel,
     output wire [NUM_BANKS-1:0][NUM_PORTS-1:0][WORD_SIZE-1:0]   per_bank_core_req_byteen,
-    output wire [NUM_BANKS-1:0][NUM_PORTS-1:0][`WORD_WIDTH-1:0] per_bank_core_req_data,  
+    output wire [NUM_BANKS-1:0][NUM_PORTS-1:0][`WORD_WIDTH-1:0] per_bank_core_req_data,
     output wire [NUM_BANKS-1:0][NUM_PORTS-1:0][`REQS_BITS-1:0]  per_bank_core_req_tid,
     output wire [NUM_BANKS-1:0][NUM_PORTS-1:0][CORE_TAG_WIDTH-1:0] per_bank_core_req_tag,
     input  wire [NUM_BANKS-1:0]                     per_bank_core_req_ready
@@ -50,19 +50,19 @@ module VX_core_req_bank_sel #(
 
     `UNUSED_VAR (clk)
     `UNUSED_VAR (reset)
-        
+
     wire [NUM_REQS-1:0][`LINE_ADDR_WIDTH-1:0]       core_req_line_addr;
     wire [NUM_REQS-1:0][`UP(`WORD_SELECT_BITS)-1:0] core_req_wsel;
     wire [NUM_REQS-1:0][`UP(`BANK_SELECT_BITS)-1:0] core_req_bid;
 
-    for (genvar i = 0; i < NUM_REQS; i++) begin    
+    for (genvar i = 0; i < NUM_REQS; i++) begin
         if (BANK_ADDR_OFFSET == 0) begin
             assign core_req_line_addr[i] = `SELECT_LINE_ADDR0(core_req_addr[i]);
         end else begin
             assign core_req_line_addr[i] = `SELECT_LINE_ADDRX(core_req_addr[i]);
         end
         assign core_req_wsel[i] = core_req_addr[i][`UP(`WORD_SELECT_BITS)-1:0];
-    end   
+    end
 
     for (genvar i = 0; i < NUM_REQS; ++i) begin
         if (NUM_BANKS > 1) begin
@@ -86,33 +86,33 @@ module VX_core_req_bank_sel #(
     if (NUM_REQS > 1) begin
 
         if (NUM_PORTS > 1) begin
-            
+
             reg [NUM_BANKS-1:0][`LINE_ADDR_WIDTH-1:0] per_bank_line_addr_r;
             reg [NUM_BANKS-1:0] per_bank_rw_r;
             wire [NUM_REQS-1:0] core_req_line_match;
-            
+
             always @(*) begin
                 per_bank_line_addr_r = 'x;
                 per_bank_rw_r = 'x;
-                for (integer i = NUM_REQS-1; i >= 0; --i) begin                                    
+                for (integer i = NUM_REQS-1; i >= 0; --i) begin
                     if (core_req_valid[i]) begin
                         per_bank_line_addr_r[core_req_bid[i]] = core_req_line_addr[i];
                         per_bank_rw_r[core_req_bid[i]] = core_req_rw[i];
-                    end     
+                    end
                 end
             end
-            
+
             for (genvar i = 0; i < NUM_REQS; ++i) begin
-                assign core_req_line_match[i] = (core_req_line_addr[i] == per_bank_line_addr_r[core_req_bid[i]]) 
+                assign core_req_line_match[i] = (core_req_line_addr[i] == per_bank_line_addr_r[core_req_bid[i]])
                                              && (core_req_rw[i] == per_bank_rw_r[core_req_bid[i]]);
             end
 
-            if (NUM_PORTS < NUM_REQS) begin 
+            if (NUM_PORTS < NUM_REQS) begin
 
                 reg [NUM_BANKS-1:0][NUM_PORTS-1:0][NUM_REQS-1:0] req_select_table_r;
 
                 always @(*) begin
-                    per_bank_core_req_valid_r = 0;          
+                    per_bank_core_req_valid_r = 0;
                     per_bank_core_req_pmask_r = 0;
                     per_bank_core_req_rw_r    = 'x;
                     per_bank_core_req_addr_r  = 'x;
@@ -124,13 +124,13 @@ module VX_core_req_bank_sel #(
                     req_select_table_r        = 'x;
 
                     for (integer i = NUM_REQS-1; i >= 0; --i) begin
-                        if (core_req_valid[i]) begin                    
+                        if (core_req_valid[i]) begin
                             per_bank_core_req_valid_r[core_req_bid[i]]                 = 1;
                             per_bank_core_req_pmask_r[core_req_bid[i]][i % NUM_PORTS]  = core_req_line_match[i];
                             per_bank_core_req_wsel_r[core_req_bid[i]][i % NUM_PORTS]   = core_req_wsel[i];
                             per_bank_core_req_byteen_r[core_req_bid[i]][i % NUM_PORTS] = core_req_byteen[i];
-                            per_bank_core_req_data_r[core_req_bid[i]][i % NUM_PORTS]   = core_req_data[i];                        
-                            per_bank_core_req_tid_r[core_req_bid[i]][i % NUM_PORTS]    = `REQS_BITS'(i);                                                      
+                            per_bank_core_req_data_r[core_req_bid[i]][i % NUM_PORTS]   = core_req_data[i];
+                            per_bank_core_req_tid_r[core_req_bid[i]][i % NUM_PORTS]    = `REQS_BITS'(i);
                             per_bank_core_req_tag_r[core_req_bid[i]][i % NUM_PORTS]    = core_req_tag[i];
                             per_bank_core_req_rw_r[core_req_bid[i]]   = core_req_rw[i];
                             per_bank_core_req_addr_r[core_req_bid[i]] = core_req_line_addr[i];
@@ -146,7 +146,7 @@ module VX_core_req_bank_sel #(
                                            && req_select_table_r[core_req_bid[i]][i % NUM_PORTS][i];
                     end
                 end
-                
+
             end else begin
 
                 always @(*) begin
@@ -160,17 +160,17 @@ module VX_core_req_bank_sel #(
                     per_bank_core_req_tag_r   = 'x;
                     per_bank_core_req_tid_r   = 'x;
 
-                    for (integer i = NUM_REQS-1; i >= 0; --i) begin                        
-                        if (core_req_valid[i]) begin               
+                    for (integer i = NUM_REQS-1; i >= 0; --i) begin
+                        if (core_req_valid[i]) begin
                             per_bank_core_req_valid_r[core_req_bid[i]]                 = 1;
                             per_bank_core_req_pmask_r[core_req_bid[i]][i % NUM_PORTS]  = core_req_line_match[i];
                             per_bank_core_req_wsel_r[core_req_bid[i]][i % NUM_PORTS]   = core_req_wsel[i];
                             per_bank_core_req_byteen_r[core_req_bid[i]][i % NUM_PORTS] = core_req_byteen[i];
-                            per_bank_core_req_data_r[core_req_bid[i]][i % NUM_PORTS]   = core_req_data[i];                        
-                            per_bank_core_req_tid_r[core_req_bid[i]][i % NUM_PORTS]    = `REQS_BITS'(i);    
+                            per_bank_core_req_data_r[core_req_bid[i]][i % NUM_PORTS]   = core_req_data[i];
+                            per_bank_core_req_tid_r[core_req_bid[i]][i % NUM_PORTS]    = `REQS_BITS'(i);
                             per_bank_core_req_tag_r[core_req_bid[i]][i % NUM_PORTS]    = core_req_tag[i];
                             per_bank_core_req_rw_r[core_req_bid[i]]   = core_req_rw[i];
-                            per_bank_core_req_addr_r[core_req_bid[i]] = core_req_line_addr[i];                            
+                            per_bank_core_req_addr_r[core_req_bid[i]] = core_req_line_addr[i];
                         end
                     end
                 end
@@ -195,8 +195,8 @@ module VX_core_req_bank_sel #(
                 per_bank_core_req_tag_r   = 'x;
                 per_bank_core_req_tid_r   = 'x;
 
-                for (integer i = NUM_REQS-1; i >= 0; --i) begin                                
-                    if (core_req_valid[i]) begin                
+                for (integer i = NUM_REQS-1; i >= 0; --i) begin
+                    if (core_req_valid[i]) begin
                         per_bank_core_req_valid_r[core_req_bid[i]] = 1;
                         per_bank_core_req_rw_r[core_req_bid[i]]    = core_req_rw[i];
                         per_bank_core_req_addr_r[core_req_bid[i]]  = core_req_line_addr[i];
@@ -222,11 +222,11 @@ module VX_core_req_bank_sel #(
                 end
             end else begin
                 always @(*) begin
-                    core_req_ready_r = 0;     
+                    core_req_ready_r = 0;
                     core_req_ready_r[per_bank_core_req_tid_r[0]] = per_bank_core_req_ready;
                 end
             end
-        end        
+        end
 
     end else begin
 

@@ -16,7 +16,7 @@ interface VX_csr_req_if ();
     wire                    use_imm;
     wire [`NRI_BITS-1:0]    imm;
     wire [`NR_BITS-1:0]     rd;
-    wire                    wb;    
+    wire                    wb;
     wire                    ready;
 
     modport master (
@@ -27,7 +27,7 @@ interface VX_csr_req_if ();
         output PC,
         output op_type,
         output addr,
-        output rs1_data,        
+        output rs1_data,
         output use_imm,
         output imm,
         output rd,
@@ -43,14 +43,14 @@ interface VX_csr_req_if ();
         input  PC,
         input  op_type,
         input  addr,
-        input  rs1_data,        
+        input  rs1_data,
         input  use_imm,
         input  imm,
         input  rd,
         input  wb,
         output ready
     );
-    
+
 endinterface
 
 `endif

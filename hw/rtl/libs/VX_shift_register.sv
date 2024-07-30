@@ -1,7 +1,7 @@
 `include "VX_platform.vh"
 
 `TRACING_OFF
-module VX_shift_register_nr #( 
+module VX_shift_register_nr #(
     parameter DATAW  = 1,
     parameter DEPTH  = 1,
     parameter NTAPS  = 1,
@@ -16,7 +16,7 @@ module VX_shift_register_nr #(
     reg [DEPTH-1:0][DATAW-1:0] entries;
 
     always @(posedge clk) begin
-        if (enable) begin                    
+        if (enable) begin
             for (integer i = DEPTH-1; i > 0; --i)
                 entries[i] <= entries[i-1];
             entries[0] <= data_in;
@@ -29,8 +29,8 @@ module VX_shift_register_nr #(
 
 endmodule
 
-module VX_shift_register_wr #( 
-    parameter DATAW  = 1, 
+module VX_shift_register_wr #(
+    parameter DATAW  = 1,
     parameter DEPTH  = 1,
     parameter NTAPS  = 1,
     parameter DEPTHW = $clog2(DEPTH),
@@ -47,7 +47,7 @@ module VX_shift_register_wr #(
     always @(posedge clk) begin
         if (reset) begin
             entries <= '0;
-        end else if (enable) begin                    
+        end else if (enable) begin
             for (integer i = DEPTH-1; i > 0; --i)
                 entries[i] <= entries[i-1];
             entries[0] <= data_in;
@@ -60,8 +60,8 @@ module VX_shift_register_wr #(
 
 endmodule
 
-module VX_shift_register #( 
-    parameter DATAW  = 1, 
+module VX_shift_register #(
+    parameter DATAW  = 1,
     parameter RESETW = 0,
     parameter DEPTH  = 1,
     parameter NTAPS  = 1,
@@ -76,7 +76,7 @@ module VX_shift_register #(
 );
     if (RESETW != 0) begin
         if (RESETW == DATAW) begin
-    
+
             VX_shift_register_wr #(
                 .DATAW (DATAW),
                 .DEPTH (DEPTH),
@@ -89,9 +89,9 @@ module VX_shift_register #(
                 .data_in  (data_in),
                 .data_out (data_out)
             );
-    
+
         end else begin
-    
+
             VX_shift_register_wr #(
                 .DATAW (RESETW),
                 .DEPTH (DEPTH),
@@ -119,10 +119,10 @@ module VX_shift_register #(
 
         end
 
-    end else begin        
+    end else begin
 
         `UNUSED_VAR (reset)
-    
+
         VX_shift_register_nr #(
             .DATAW (DATAW),
             .DEPTH (DEPTH),
@@ -135,7 +135,7 @@ module VX_shift_register #(
             .data_out (data_out)
         );
 
-    end    
+    end
 
 endmodule
 `TRACING_ON

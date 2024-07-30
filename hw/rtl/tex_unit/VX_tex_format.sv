@@ -4,14 +4,14 @@ module VX_tex_format #(
     parameter CORE_ID = 0
 ) (
     input wire [`TEX_FORMAT_BITS-1:0] format,
-    input wire [31:0]   texel_in,    
+    input wire [31:0]   texel_in,
     output wire [31:0]  texel_out
-);  
+);
     `UNUSED_PARAM (CORE_ID)
 
     reg [31:0] texel_out_r;
 
-    always @(*) begin        
+    always @(*) begin
         case (format)
         `TEX_FORMAT_A8R8G8B8: begin
             texel_out_r[07:00] = texel_in[7:0];

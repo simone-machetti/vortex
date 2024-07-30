@@ -36,7 +36,7 @@ module VX_fetch #(
         `SCOPE_BIND_VX_fetch_warp_sched
 
         .clk              (clk),
-        .reset            (reset),     
+        .reset            (reset),
 
         .warp_ctl_if      (warp_ctl_if),
         .wstall_if        (wstall_if),
@@ -46,9 +46,9 @@ module VX_fetch #(
         .ifetch_req_if    (ifetch_req_if),
 
         .fetch_to_csr_if  (fetch_to_csr_if),
-        
+
         .busy             (busy)
-    ); 
+    );
 
     VX_icache_stage #(
         .CORE_ID(CORE_ID)
@@ -56,13 +56,13 @@ module VX_fetch #(
         `SCOPE_BIND_VX_fetch_icache_stage
 
         .clk            (clk),
-        .reset          (reset),        
-        
+        .reset          (reset),
+
         .icache_rsp_if  (icache_rsp_if),
         .icache_req_if  (icache_req_if),
 
         .ifetch_req_if  (ifetch_req_if),
-        .ifetch_rsp_if  (ifetch_rsp_if)   
+        .ifetch_rsp_if  (ifetch_rsp_if)
     );
 
 endmodule

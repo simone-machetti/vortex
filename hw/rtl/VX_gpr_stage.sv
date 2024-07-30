@@ -6,8 +6,8 @@ module VX_gpr_stage #(
     input wire              clk,
     input wire              reset,
 
-    // inputs    
-    VX_writeback_if.slave   writeback_if,  
+    // inputs
+    VX_writeback_if.slave   writeback_if,
     VX_gpr_req_if.slave     gpr_req_if,
 
     // outputs
@@ -15,13 +15,13 @@ module VX_gpr_stage #(
 );
 
     `UNUSED_PARAM (CORE_ID)
-    `UNUSED_VAR (reset)    
+    `UNUSED_VAR (reset)
 
     localparam RAM_SIZE = `NUM_WARPS * `NUM_REGS;
 
     // ensure r0 never gets written, which can happen before the reset
     wire write_enable = writeback_if.valid && (writeback_if.rd != 0);
-    
+
     wire [`NUM_THREADS-1:0] wren;
     for (genvar i = 0; i < `NUM_THREADS; ++i) begin
         assign wren[i] = write_enable && writeback_if.tmask[i];
@@ -61,10 +61,10 @@ module VX_gpr_stage #(
             .rdata (gpr_rsp_if.rs2_data[i])
         );
     end
-    
+
 `ifdef EXT_F_ENABLE
     wire [$clog2(RAM_SIZE)-1:0] raddr3;
-    assign raddr3 = {gpr_req_if.wid, gpr_req_if.rs3};    
+    assign raddr3 = {gpr_req_if.wid, gpr_req_if.rs3};
 
     for (genvar i = 0; i < `NUM_THREADS; ++i) begin
         VX_dp_ram #(
@@ -81,11 +81,11 @@ module VX_gpr_stage #(
             .rdata (gpr_rsp_if.rs3_data[i])
         );
     end
-`else    
-    `UNUSED_VAR (gpr_req_if.rs3)    
+`else
+    `UNUSED_VAR (gpr_req_if.rs3)
     assign gpr_rsp_if.rs3_data = 'x;
 `endif
-    
+
     assign writeback_if.ready = 1'b1;
 
 endmodule

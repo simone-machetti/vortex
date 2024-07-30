@@ -6,12 +6,12 @@ module VX_skid_buffer #(
     parameter PASSTHRU       = 0,
     parameter NOBACKPRESSURE = 0,
     parameter OUT_REG        = 0
-) ( 
+) (
     input  wire             clk,
     input  wire             reset,
-    
+
     input  wire             valid_in,
-    output wire             ready_in,        
+    output wire             ready_in,
     input  wire [DATAW-1:0] data_in,
 
     output wire [DATAW-1:0] data_out,
@@ -46,7 +46,7 @@ module VX_skid_buffer #(
         );
 
         assign ready_in = ~stall;
-    
+
     end else begin
 
         if (OUT_REG) begin
@@ -55,15 +55,15 @@ module VX_skid_buffer #(
             reg [DATAW-1:0] buffer;
             reg             valid_out_r;
             reg             use_buffer;
-            
+
             wire push = valid_in && ready_in;
             wire pop = !valid_out_r || ready_out;
-            
+
             always @(posedge clk) begin
                 if (reset) begin
-                    valid_out_r <= 0; 
+                    valid_out_r <= 0;
                     use_buffer  <= 0;
-                end else begin             
+                end else begin
                     if (ready_out) begin
                         use_buffer <= 0;
                     end else if (valid_in && valid_out_r) begin
@@ -80,7 +80,7 @@ module VX_skid_buffer #(
                     buffer <= data_in;
                 end
                 if (pop && !use_buffer) begin
-                    data_out_r <= data_in;                    
+                    data_out_r <= data_in;
                 end else if (ready_out) begin
                     data_out_r <= buffer;
                 end
@@ -105,7 +105,7 @@ module VX_skid_buffer #(
                     rd_ptr_r    <= 1;
                 end else begin
                     if (push) begin
-                        if (!pop) begin                            
+                        if (!pop) begin
                             ready_in_r  <= rd_ptr_r;
                             valid_out_r <= 1;
                         end
@@ -114,7 +114,7 @@ module VX_skid_buffer #(
                         valid_out_r <= rd_ptr_r;
                     end
                     rd_ptr_r <= rd_ptr_r ^ (push ^ pop);
-                end                   
+                end
             end
 
             always @(posedge clk) begin

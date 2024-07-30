@@ -1,7 +1,7 @@
 
 `include "VX_fpu_define.vh"
 
-module VX_fp_class # (    
+module VX_fp_class # (
     parameter MAN_BITS = 23,
     parameter EXP_BITS = 8
 ) (
@@ -12,7 +12,7 @@ module VX_fp_class # (
     wire is_normal    = (exp_i != '0) && (exp_i != '1);
     wire is_zero      = (exp_i == '0) && (man_i == '0);
     wire is_subnormal = (exp_i == '0) && (man_i != '0);
-    wire is_inf       = (exp_i == '1) && (man_i == '0); 
+    wire is_inf       = (exp_i == '1) && (man_i == '0);
     wire is_nan       = (exp_i == '1) && (man_i != '0);
     wire is_signaling = is_nan && ~man_i[MAN_BITS-1];
     wire is_quiet     = is_nan && ~is_signaling;

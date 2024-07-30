@@ -9,15 +9,15 @@ module Vortex (
 
     // Memory request
     output wire                             mem_req_valid,
-    output wire                             mem_req_rw,    
-    output wire [`VX_MEM_BYTEEN_WIDTH-1:0]  mem_req_byteen,    
+    output wire                             mem_req_rw,
+    output wire [`VX_MEM_BYTEEN_WIDTH-1:0]  mem_req_byteen,
     output wire [`VX_MEM_ADDR_WIDTH-1:0]    mem_req_addr,
     output wire [`VX_MEM_DATA_WIDTH-1:0]    mem_req_data,
     output wire [`VX_MEM_TAG_WIDTH-1:0]     mem_req_tag,
     input  wire                             mem_req_ready,
 
-    // Memory response    
-    input wire                              mem_rsp_valid,        
+    // Memory response
+    input wire                              mem_rsp_valid,
     input wire [`VX_MEM_DATA_WIDTH-1:0]     mem_rsp_data,
     input wire [`VX_MEM_TAG_WIDTH-1:0]      mem_rsp_tag,
     output wire                             mem_rsp_ready,
@@ -100,7 +100,7 @@ module Vortex (
             .NC_ENABLE          (1)
         ) l3cache (
             `SCOPE_BIND_Vortex_l3cache
- 
+
             .clk                (clk),
             .reset              (l3_reset),
 
@@ -108,7 +108,7 @@ module Vortex (
             .perf_cache_if      (perf_l3cache_if),
         `endif
 
-            // Core request    
+            // Core request
             .core_req_valid     (per_cluster_mem_req_valid),
             .core_req_rw        (per_cluster_mem_req_rw),
             .core_req_byteen    (per_cluster_mem_req_byteen),
@@ -120,7 +120,7 @@ module Vortex (
             // Core response
             .core_rsp_valid     (per_cluster_mem_rsp_valid),
             .core_rsp_data      (per_cluster_mem_rsp_data),
-            .core_rsp_tag       (per_cluster_mem_rsp_tag),              
+            .core_rsp_tag       (per_cluster_mem_rsp_tag),
             .core_rsp_ready     (per_cluster_mem_rsp_ready),
             `UNUSED_PIN (core_rsp_tmask),
 
@@ -134,7 +134,7 @@ module Vortex (
             .mem_req_ready      (mem_req_ready),
 
             // Memory response
-            .mem_rsp_valid      (mem_rsp_valid),            
+            .mem_rsp_valid      (mem_rsp_valid),
             .mem_rsp_data       (mem_rsp_data),
             .mem_rsp_tag        (mem_rsp_tag),
             .mem_rsp_ready      (mem_rsp_ready)
@@ -146,7 +146,7 @@ module Vortex (
 
         VX_mem_arb #(
             .NUM_REQS     (`NUM_CLUSTERS),
-            .DATA_WIDTH   (`L3_MEM_DATA_WIDTH),            
+            .DATA_WIDTH   (`L3_MEM_DATA_WIDTH),
             .ADDR_WIDTH   (`L3_MEM_ADDR_WIDTH),
             .TAG_IN_WIDTH (`L2_MEM_TAG_WIDTH),
             .TYPE         ("R"),
@@ -161,14 +161,14 @@ module Vortex (
             .req_rw_in      (per_cluster_mem_req_rw),
             .req_byteen_in  (per_cluster_mem_req_byteen),
             .req_addr_in    (per_cluster_mem_req_addr),
-            .req_data_in    (per_cluster_mem_req_data),  
-            .req_tag_in     (per_cluster_mem_req_tag),  
+            .req_data_in    (per_cluster_mem_req_data),
+            .req_tag_in     (per_cluster_mem_req_tag),
             .req_ready_in   (per_cluster_mem_req_ready),
 
             // Memory request
             .req_valid_out  (mem_req_valid),
-            .req_rw_out     (mem_req_rw),        
-            .req_byteen_out (mem_req_byteen),        
+            .req_rw_out     (mem_req_rw),
+            .req_byteen_out (mem_req_byteen),
             .req_addr_out   (mem_req_addr),
             .req_data_out   (mem_req_data),
             .req_tag_out    (mem_req_tag),
@@ -179,7 +179,7 @@ module Vortex (
             .rsp_data_out   (per_cluster_mem_rsp_data),
             .rsp_tag_out    (per_cluster_mem_rsp_tag),
             .rsp_ready_out  (per_cluster_mem_rsp_ready),
-            
+
             // Memory response
             .rsp_valid_in   (mem_rsp_valid),
             .rsp_tag_in     (mem_rsp_tag),

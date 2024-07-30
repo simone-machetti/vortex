@@ -5,8 +5,8 @@
 
 interface VX_alu_req_if ();
 
-    wire                    valid;  
-    wire [`UUID_BITS-1:0]   uuid; 
+    wire                    valid;
+    wire [`UUID_BITS-1:0]   uuid;
     wire [`NW_BITS-1:0]     wid;
     wire [`NUM_THREADS-1:0] tmask;
     wire [31:0]             PC;
@@ -20,7 +20,7 @@ interface VX_alu_req_if ();
     wire [`NUM_THREADS-1:0][31:0] rs1_data;
     wire [`NUM_THREADS-1:0][31:0] rs2_data;
     wire [`NR_BITS-1:0]     rd;
-    wire                    wb;    
+    wire                    wb;
     wire                    ready;
 
     modport master (
@@ -39,7 +39,7 @@ interface VX_alu_req_if ();
         output rs1_data,
         output rs2_data,
         output rd,
-        output wb,    
+        output wb,
         input  ready
     );
 
@@ -59,7 +59,7 @@ interface VX_alu_req_if ();
         input  rs1_data,
         input  rs2_data,
         input  rd,
-        input  wb,    
+        input  wb,
         output ready
     );
 

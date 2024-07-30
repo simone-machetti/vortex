@@ -18,7 +18,7 @@ interface VX_dcache_rsp_if #(
     modport master (
         output valid,
         output tmask,
-        output data,        
+        output data,
         output tag,
         input  ready
     );

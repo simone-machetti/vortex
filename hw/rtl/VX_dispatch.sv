@@ -15,7 +15,7 @@ module VX_dispatch (
 `ifdef EXT_F_ENABLE
     VX_fpu_req_if.master    fpu_req_if,
 `endif
-    VX_gpu_req_if.master    gpu_req_if    
+    VX_gpu_req_if.master    gpu_req_if
 );
     wire [`NT_BITS-1:0] tid;
     wire alu_req_ready;
@@ -40,7 +40,7 @@ module VX_dispatch (
 
     wire alu_req_valid = ibuffer_if.valid && (ibuffer_if.ex_type == `EX_ALU);
     wire [`INST_ALU_BITS-1:0] alu_op_type = `INST_ALU_BITS'(ibuffer_if.op_type);
-    
+
     VX_skid_buffer #(
         .DATAW   (`UUID_BITS + `NW_BITS + `NUM_THREADS + 32 + 32 + `INST_ALU_BITS + `INST_MOD_BITS + 32 + 1 + 1 + `NR_BITS + 1 + `NT_BITS + (2 * `NUM_THREADS * 32)),
         .OUT_REG (1)
@@ -103,7 +103,7 @@ module VX_dispatch (
 `ifdef EXT_F_ENABLE
     wire fpu_req_valid = ibuffer_if.valid && (ibuffer_if.ex_type == `EX_FPU);
     wire [`INST_FPU_BITS-1:0] fpu_op_type = `INST_FPU_BITS'(ibuffer_if.op_type);
-        
+
     VX_skid_buffer #(
         .DATAW   (`UUID_BITS + `NW_BITS + `NUM_THREADS + 32 + `INST_FPU_BITS + `INST_MOD_BITS + `NR_BITS + 1 + (3 * `NUM_THREADS * 32)),
         .OUT_REG (1)
@@ -138,12 +138,12 @@ module VX_dispatch (
         .data_out  ({gpu_req_if.uuid, gpu_req_if.wid, gpu_req_if.tmask, gpu_req_if.PC, gpu_req_if.next_PC, gpu_req_if.op_type, gpu_req_if.op_mod, gpu_req_if.rd, gpu_req_if.wb, gpu_req_if.tid, gpu_req_if.rs1_data, gpu_req_if.rs2_data, gpu_req_if.rs3_data}),
         .valid_out (gpu_req_if.valid),
         .ready_out (gpu_req_if.ready)
-    ); 
+    );
 
     // can take next request?
     reg ready_r;
     always @(*) begin
-        case (ibuffer_if.ex_type) 
+        case (ibuffer_if.ex_type)
         `EX_ALU: ready_r = alu_req_ready;
         `EX_LSU: ready_r = lsu_req_ready;
         `EX_CSR: ready_r = csr_req_ready;
@@ -155,5 +155,5 @@ module VX_dispatch (
         endcase
     end
     assign ibuffer_if.ready = ready_r;
-    
+
 endmodule

@@ -16,7 +16,7 @@ module VX_scan #(
 
     localparam LOGN = $clog2(N);
 
-    wire [LOGN:0][N-1:0] t;   
+    wire [LOGN:0][N-1:0] t;
 
     // reverses bits
     if (REVERSE) begin
@@ -48,7 +48,7 @@ module VX_scan #(
 		        assign t[i+1] = t[i] | shifted;
             end
 	    end
-    end   
+    end
 
     // reverse bits
     if (REVERSE) begin
@@ -56,7 +56,7 @@ module VX_scan #(
     end else begin
         for (genvar i = 0; i < N; i++) begin
             assign data_out[i] = t[LOGN][N-1-i];
-        end        
+        end
     end
 
 `IGNORE_WARNINGS_END

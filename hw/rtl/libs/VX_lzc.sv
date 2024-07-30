@@ -20,12 +20,12 @@ module VX_lzc #(
         .N       (N),
         .DATAW   (LOGN),
         .REVERSE (MODE)
-    ) find_first (        
+    ) find_first (
         .data_i  (indices),
         .valid_i (in_i),
         .data_o  (cnt_o),
         .valid_o (valid_o)
     );
-  
+
 endmodule
 `TRACING_ON

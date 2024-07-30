@@ -2,19 +2,19 @@
 
 module VX_miss_resrv #(
     parameter CACHE_ID          = 0,
-    parameter BANK_ID           = 0, 
-    
+    parameter BANK_ID           = 0,
+
     // Number of Word requests per cycle
-    parameter NUM_REQS          = 1, 
-    
+    parameter NUM_REQS          = 1,
+
     // Size of line inside a bank in bytes
-    parameter CACHE_LINE_SIZE   = 1, 
+    parameter CACHE_LINE_SIZE   = 1,
     // Number of banks
     parameter NUM_BANKS         = 1,
     // Number of ports per banks
     parameter NUM_PORTS         = 1,
     // Size of a word in bytes
-    parameter WORD_SIZE         = 1, 
+    parameter WORD_SIZE         = 1,
     // Miss Reserv Queue Knob
     parameter MSHR_SIZE         = 1,
     // core request tag size
@@ -35,7 +35,7 @@ module VX_miss_resrv #(
     input wire                          allocate_valid,
     input wire [`LINE_ADDR_WIDTH-1:0]   allocate_addr,
     input wire [`MSHR_DATA_WIDTH-1:0]   allocate_data,
-    output wire [MSHR_ADDR_WIDTH-1:0]   allocate_id,   
+    output wire [MSHR_ADDR_WIDTH-1:0]   allocate_id,
     output wire                         allocate_ready,
 
     // fill
@@ -45,12 +45,12 @@ module VX_miss_resrv #(
 
     // lookup
     input wire                          lookup_valid,
-    input wire                          lookup_replay,   
+    input wire                          lookup_replay,
     input wire [MSHR_ADDR_WIDTH-1:0]    lookup_id,
     input wire [`LINE_ADDR_WIDTH-1:0]   lookup_addr,
     output wire                         lookup_match,
-    
-    // dequeue    
+
+    // dequeue
     output wire                         dequeue_valid,
     output wire [MSHR_ADDR_WIDTH-1:0]   dequeue_id,
     output wire [`LINE_ADDR_WIDTH-1:0]  dequeue_addr,
@@ -63,14 +63,14 @@ module VX_miss_resrv #(
 );
     `UNUSED_PARAM (CACHE_ID)
     `UNUSED_PARAM (BANK_ID)
-    
+
     reg [MSHR_SIZE-1:0][`LINE_ADDR_WIDTH-1:0] addr_table, addr_table_n;
     reg [MSHR_SIZE-1:0] valid_table, valid_table_n;
     reg [MSHR_SIZE-1:0] ready_table, ready_table_n;
-    
+
     reg allocate_rdy_r, allocate_rdy_n;
     reg [MSHR_ADDR_WIDTH-1:0] allocate_id_r, allocate_id_n;
-    
+
     reg dequeue_val_r, dequeue_val_n, dequeue_val_x;
     reg [MSHR_ADDR_WIDTH-1:0] dequeue_id_r, dequeue_id_n, dequeue_id_x;
 
@@ -78,22 +78,22 @@ module VX_miss_resrv #(
     reg [MSHR_SIZE-1:0] ready_table_x;
 
     wire [MSHR_SIZE-1:0] addr_matches;
-    
+
     wire allocate_fire = allocate_valid && allocate_ready;
-    
+
     wire dequeue_fire = dequeue_valid && dequeue_ready;
 
     for (genvar i = 0; i < MSHR_SIZE; ++i) begin
         assign addr_matches[i] = (addr_table[i] == lookup_addr);
     end
-    
+
     always @(*) begin
         valid_table_x = valid_table;
         ready_table_x = ready_table;
         if (dequeue_fire) begin
             valid_table_x[dequeue_id] = 0;
         end
-        if (lookup_replay) begin            
+        if (lookup_replay) begin
             ready_table_x |= addr_matches;
         end
     end
@@ -122,7 +122,7 @@ module VX_miss_resrv #(
         dequeue_id_n  = dequeue_id_r;
 
         if (dequeue_fire) begin
-            dequeue_val_n = dequeue_val_x;            
+            dequeue_val_n = dequeue_val_x;
             dequeue_id_n  = dequeue_id_x;
         end
 
@@ -150,21 +150,21 @@ module VX_miss_resrv #(
         end else begin
             valid_table    <= valid_table_n;
             allocate_rdy_r <= allocate_rdy_n;
-            dequeue_val_r  <= dequeue_val_n;      
+            dequeue_val_r  <= dequeue_val_n;
         end
         ready_table   <= ready_table_n;
-        addr_table    <= addr_table_n;                
+        addr_table    <= addr_table_n;
         dequeue_id_r  <= dequeue_id_n;
         allocate_id_r <= allocate_id_n;
 
-        `ASSERT(!allocate_fire || !valid_table[allocate_id_r], ("runtime error"));        
+        `ASSERT(!allocate_fire || !valid_table[allocate_id_r], ("runtime error"));
         `ASSERT(!release_valid || valid_table[release_id], ("runtime error"));
     end
-    
-    `RUNTIME_ASSERT((!allocate_fire || ~valid_table[allocate_id]), ("%t: *** cache%0d:%0d in-use allocation: addr=%0h, id=%0d", $time, CACHE_ID, BANK_ID, 
+
+    `RUNTIME_ASSERT((!allocate_fire || ~valid_table[allocate_id]), ("%t: *** cache%0d:%0d in-use allocation: addr=%0h, id=%0d", $time, CACHE_ID, BANK_ID,
         `LINE_TO_BYTE_ADDR(allocate_addr, BANK_ID), allocate_id))
-    
-    `RUNTIME_ASSERT((!fill_valid || valid_table[fill_id]), ("%t: *** cache%0d:%0d invalid fill: addr=%0h, id=%0d", $time, CACHE_ID, BANK_ID, 
+
+    `RUNTIME_ASSERT((!fill_valid || valid_table[fill_id]), ("%t: *** cache%0d:%0d invalid fill: addr=%0h, id=%0d", $time, CACHE_ID, BANK_ID,
         `LINE_TO_BYTE_ADDR(addr_table[fill_id], BANK_ID), fill_id))
 
     VX_dp_ram #(
@@ -173,7 +173,7 @@ module VX_miss_resrv #(
         .LUTRAM (1)
     ) entries (
         .clk   (clk),
-        .waddr (allocate_id_r),                                
+        .waddr (allocate_id_r),
         .raddr (dequeue_id_r),
         .wren  (allocate_valid),
         .wdata (allocate_data),
@@ -197,37 +197,37 @@ module VX_miss_resrv #(
 
     `UNUSED_VAR (lookup_valid)
 
-`ifdef DBG_TRACE_CACHE_MSHR        
+`ifdef DBG_TRACE_CACHE_MSHR
     always @(posedge clk) begin
         if (allocate_fire || fill_valid || dequeue_fire || lookup_replay || lookup_valid || release_valid) begin
             if (allocate_fire)
                 dpi_trace("%d: cache%0d:%0d mshr-allocate: addr=%0h, id=%0d (#%0d)\n", $time, CACHE_ID, BANK_ID,
                     `LINE_TO_BYTE_ADDR(allocate_addr, BANK_ID), allocate_id, deq_req_id);
             if (fill_valid)
-                dpi_trace("%d: cache%0d:%0d mshr-fill: addr=%0h, id=%0d, addr=%0h\n", $time, CACHE_ID, BANK_ID, 
+                dpi_trace("%d: cache%0d:%0d mshr-fill: addr=%0h, id=%0d, addr=%0h\n", $time, CACHE_ID, BANK_ID,
                     `LINE_TO_BYTE_ADDR(addr_table[fill_id], BANK_ID), fill_id, `LINE_TO_BYTE_ADDR(fill_addr, BANK_ID));
             if (dequeue_fire)
-                dpi_trace("%d: cache%0d:%0d mshr-dequeue: addr=%0h, id=%0d (#%0d)\n", $time, CACHE_ID, BANK_ID, 
-                    `LINE_TO_BYTE_ADDR(dequeue_addr, BANK_ID), dequeue_id_r, deq_req_id);      
+                dpi_trace("%d: cache%0d:%0d mshr-dequeue: addr=%0h, id=%0d (#%0d)\n", $time, CACHE_ID, BANK_ID,
+                    `LINE_TO_BYTE_ADDR(dequeue_addr, BANK_ID), dequeue_id_r, deq_req_id);
             if (lookup_replay)
-                dpi_trace("%d: cache%0d:%0d mshr-replay: addr=%0h, id=%0d (#%0d)\n", $time, CACHE_ID, BANK_ID, 
+                dpi_trace("%d: cache%0d:%0d mshr-replay: addr=%0h, id=%0d (#%0d)\n", $time, CACHE_ID, BANK_ID,
                     `LINE_TO_BYTE_ADDR(lookup_addr, BANK_ID), lookup_id, lkp_req_id);
             if (lookup_valid)
-                dpi_trace("%d: cache%0d:%0d mshr-lookup: addr=%0h, id=%0d, match=%b (#%0d)\n", $time, CACHE_ID, BANK_ID, 
+                dpi_trace("%d: cache%0d:%0d mshr-lookup: addr=%0h, id=%0d, match=%b (#%0d)\n", $time, CACHE_ID, BANK_ID,
                     `LINE_TO_BYTE_ADDR(lookup_addr, BANK_ID), lookup_id, lookup_match, lkp_req_id);
             if (release_valid)
                 dpi_trace("%d: cache%0d:%0d mshr-release id=%0d (#%0d)\n", $time, CACHE_ID, BANK_ID, release_id, rel_req_id);
             dpi_trace("%d: cache%0d:%0d mshr-table", $time, CACHE_ID, BANK_ID);
             for (integer i = 0; i < MSHR_SIZE; ++i) begin
                 if (valid_table[i]) begin
-                    dpi_trace(" ");                    
-                    if (ready_table[i]) 
+                    dpi_trace(" ");
+                    if (ready_table[i])
                         dpi_trace("*");
                     dpi_trace("%0d=%0h", i, `LINE_TO_BYTE_ADDR(addr_table[i], BANK_ID));
                 end
             end
             dpi_trace("\n");
-        end        
+        end
     end
 `endif
 

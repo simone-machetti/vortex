@@ -12,12 +12,12 @@ interface VX_cmt_to_csr_if ();
     wire [$clog2(5*`NUM_THREADS+1)-1:0] commit_size;
 `endif
     modport master (
-        output valid,    
+        output valid,
         output commit_size
     );
 
     modport slave (
-        input valid,   
+        input valid,
         input commit_size
     );
 

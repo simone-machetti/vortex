@@ -8,10 +8,10 @@ module VX_fixed_arbiter #(
 ) (
     input  wire                     clk,
     input  wire                     reset,
-    input  wire [NUM_REQS-1:0]      requests,           
+    input  wire [NUM_REQS-1:0]      requests,
     input  wire                     enable,
     output wire [LOG_NUM_REQS-1:0]  grant_index,
-    output wire [NUM_REQS-1:0]      grant_onehot,   
+    output wire [NUM_REQS-1:0]      grant_onehot,
     output wire                     grant_valid
   );
 
@@ -20,8 +20,8 @@ module VX_fixed_arbiter #(
     `UNUSED_VAR (reset)
     `UNUSED_VAR (enable)
 
-    if (NUM_REQS == 1)  begin        
-        
+    if (NUM_REQS == 1)  begin
+
         assign grant_index  = 0;
         assign grant_onehot = requests;
         assign grant_valid  = requests[0];
@@ -38,6 +38,6 @@ module VX_fixed_arbiter #(
         );
 
     end
-    
+
 endmodule
 `TRACING_ON

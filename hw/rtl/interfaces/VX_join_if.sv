@@ -9,12 +9,12 @@ interface VX_join_if ();
     wire [`NW_BITS-1:0] wid;
 
     modport master (
-        output valid,    
+        output valid,
         output wid
     );
 
     modport slave (
-        input valid,   
+        input valid,
         input wid
     );
 

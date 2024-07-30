@@ -4,13 +4,13 @@ module VX_shared_mem #(
     parameter CACHE_ID                      = 0,
 
     // Size of cache in bytes
-    parameter CACHE_SIZE                    = (1024*16), 
+    parameter CACHE_SIZE                    = (1024*16),
     // Number of banks
-    parameter NUM_BANKS                     = 2, 
+    parameter NUM_BANKS                     = 2,
     // Size of a word in bytes
-    parameter WORD_SIZE                     = 4, 
+    parameter WORD_SIZE                     = 4,
     // Number of Word requests per cycle
-    parameter NUM_REQS                      = 4, 
+    parameter NUM_REQS                      = 4,
 
     // Core Request Queue Size
     parameter CREQ_SIZE                     = 2,
@@ -25,16 +25,16 @@ module VX_shared_mem #(
 
     // bank offset from beginning of index range
     parameter BANK_ADDR_OFFSET              = `CLOG2(256)
- ) (    
+ ) (
     input wire clk,
-    input wire reset,   
+    input wire reset,
 
     // PERF
 `ifdef PERF_ENABLE
     VX_perf_cache_if.master perf_cache_if,
 `endif
 
-    // Core request    
+    // Core request
     input wire [NUM_REQS-1:0]                   core_req_valid,
     input wire [NUM_REQS-1:0]                   core_req_rw,
     input wire [NUM_REQS-1:0][`WORD_ADDR_WIDTH-1:0] core_req_addr,
@@ -57,15 +57,15 @@ module VX_shared_mem #(
 
     localparam CACHE_LINE_SIZE = WORD_SIZE;
 
-    wire [NUM_BANKS-1:0]                    per_bank_core_req_valid_unqual; 
-    wire [NUM_BANKS-1:0]                    per_bank_core_req_rw_unqual;  
+    wire [NUM_BANKS-1:0]                    per_bank_core_req_valid_unqual;
+    wire [NUM_BANKS-1:0]                    per_bank_core_req_rw_unqual;
     wire [NUM_BANKS-1:0][`LINE_ADDR_WIDTH-1:0] per_bank_core_req_addr_unqual;
     wire [NUM_BANKS-1:0][WORD_SIZE-1:0]     per_bank_core_req_byteen_unqual;
     wire [NUM_BANKS-1:0][`WORD_WIDTH-1:0]   per_bank_core_req_data_unqual;
     wire [NUM_BANKS-1:0][CORE_TAG_WIDTH-1:0] per_bank_core_req_tag_unqual;
     wire [NUM_BANKS-1:0][`REQS_BITS-1:0]    per_bank_core_req_tid_unqual;
     wire [NUM_BANKS-1:0]                    per_bank_core_req_ready_unqual;
-    
+
     VX_core_req_bank_sel #(
         .CACHE_ID        (CACHE_ID),
         .CACHE_LINE_SIZE (WORD_SIZE),
@@ -75,12 +75,12 @@ module VX_shared_mem #(
         .NUM_REQS        (NUM_REQS),
         .CORE_TAG_WIDTH  (CORE_TAG_WIDTH),
         .BANK_ADDR_OFFSET(BANK_ADDR_OFFSET)
-    ) core_req_bank_sel (        
+    ) core_req_bank_sel (
         .clk        (clk),
         .reset      (reset),
-    `ifdef PERF_ENABLE        
+    `ifdef PERF_ENABLE
         .bank_stalls(perf_cache_if.bank_stalls),
-    `endif     
+    `endif
         .core_req_valid          (core_req_valid),
         .core_req_rw             (core_req_rw),
         .core_req_addr           (core_req_addr),
@@ -100,8 +100,8 @@ module VX_shared_mem #(
         `UNUSED_PIN (per_bank_core_req_wsel)
     );
 
-    wire [NUM_BANKS-1:0]                    per_bank_core_req_valid; 
-    wire [NUM_BANKS-1:0]                    per_bank_core_req_rw;      
+    wire [NUM_BANKS-1:0]                    per_bank_core_req_valid;
+    wire [NUM_BANKS-1:0]                    per_bank_core_req_rw;
     wire [NUM_BANKS-1:0][`LINE_ADDR_WIDTH-1:0] per_bank_core_req_addr;
     wire [NUM_BANKS-1:0][WORD_SIZE-1:0]     per_bank_core_req_byteen;
     wire [NUM_BANKS-1:0][`WORD_WIDTH-1:0]   per_bank_core_req_data;
@@ -127,7 +127,7 @@ module VX_shared_mem #(
     assign core_req_writeonly_unqual = ~(| core_req_read_mask_unqual);
 
     VX_elastic_buffer #(
-        .DATAW   (NUM_BANKS * (1 + 1 + `LINE_ADDR_WIDTH + WORD_SIZE + `WORD_WIDTH + CORE_TAG_WIDTH + `REQS_BITS) + NUM_BANKS + 1), 
+        .DATAW   (NUM_BANKS * (1 + 1 + `LINE_ADDR_WIDTH + WORD_SIZE + `WORD_WIDTH + CORE_TAG_WIDTH + `REQS_BITS) + NUM_BANKS + 1),
         .SIZE    (CREQ_SIZE),
         .OUT_REG (1)   // output should be registered for the data_store addr port
     ) core_req_queue (
@@ -136,19 +136,19 @@ module VX_shared_mem #(
         .ready_in   (creq_in_ready),
         .valid_in   (creq_in_valid),
         .data_in    ({per_bank_core_req_valid_unqual,
-                      per_bank_core_req_rw_unqual, 
-                      per_bank_core_req_addr_unqual, 
-                      per_bank_core_req_byteen_unqual, 
-                      per_bank_core_req_data_unqual, 
+                      per_bank_core_req_rw_unqual,
+                      per_bank_core_req_addr_unqual,
+                      per_bank_core_req_byteen_unqual,
+                      per_bank_core_req_data_unqual,
                       per_bank_core_req_tag_unqual,
                       per_bank_core_req_tid_unqual,
                       core_req_read_mask_unqual,
                       core_req_writeonly_unqual}),
         .data_out   ({per_bank_core_req_valid,
-                      per_bank_core_req_rw, 
-                      per_bank_core_req_addr, 
-                      per_bank_core_req_byteen, 
-                      per_bank_core_req_data, 
+                      per_bank_core_req_rw,
+                      per_bank_core_req_addr,
+                      per_bank_core_req_byteen,
+                      per_bank_core_req_data,
                       per_bank_core_req_tag,
                       per_bank_core_req_tid,
                       core_req_read_mask,
@@ -159,16 +159,16 @@ module VX_shared_mem #(
 
     wire crsq_in_valid, crsq_in_ready;
     wire crsq_last_read;
-    
-    assign creq_out_ready = core_req_writeonly 
+
+    assign creq_out_ready = core_req_writeonly
                          || (crsq_in_ready && crsq_last_read);
 
-    wire [NUM_BANKS-1:0][`WORD_WIDTH-1:0] per_bank_core_rsp_data; 
+    wire [NUM_BANKS-1:0][`WORD_WIDTH-1:0] per_bank_core_rsp_data;
 
     for (genvar i = 0; i < NUM_BANKS; i++) begin
 
         wire [WORD_SIZE-1:0] wren = per_bank_core_req_byteen[i]
-                                  & {WORD_SIZE{per_bank_core_req_valid[i] 
+                                  & {WORD_SIZE{per_bank_core_req_valid[i]
                                             && per_bank_core_req_rw[i]}};
 
         wire [`LINE_SELECT_BITS-1:0] addr = per_bank_core_req_addr[i][`LINE_SELECT_BITS-1:0];
@@ -185,7 +185,7 @@ module VX_shared_mem #(
             .wdata (per_bank_core_req_data[i]),
             .rdata (per_bank_core_rsp_data[i])
         );
-    end  
+    end
 
     // The core response bus handles a single tag at the time
     // We first need to select the current tag to process,
@@ -212,7 +212,7 @@ module VX_shared_mem #(
                 end
             end
         end
-    end   
+    end
 
     VX_find_first #(
         .N     (NUM_BANKS),
@@ -228,8 +228,8 @@ module VX_shared_mem #(
         core_rsp_valids_in = 0;
         core_rsp_data_in   = 'x;
         bank_rsp_sel_n     = bank_rsp_sel_r;
-        for (integer i = 0; i < NUM_BANKS; i++) begin 
-            if (core_req_read_mask[i] 
+        for (integer i = 0; i < NUM_BANKS; i++) begin
+            if (core_req_read_mask[i]
              && (core_rsp_tag_in[CORE_TAG_ID_BITS-1:0] == per_bank_core_req_tag[i][CORE_TAG_ID_BITS-1:0])) begin
                 core_rsp_valids_in[per_bank_core_req_tid[i]] = 1;
                 core_rsp_data_in[per_bank_core_req_tid[i]] = per_bank_core_rsp_data[i];
@@ -246,9 +246,9 @@ module VX_shared_mem #(
     ) core_rsp_req (
         .clk       (clk),
         .reset     (reset),
-        .valid_in  (crsq_in_valid),        
+        .valid_in  (crsq_in_valid),
         .data_in   ({core_rsp_valids_in, core_rsp_data_in, core_rsp_tag_in}),
-        .ready_in  (crsq_in_ready),      
+        .ready_in  (crsq_in_ready),
         .valid_out (core_rsp_valid),
         .data_out  ({core_rsp_tmask, core_rsp_data, core_rsp_tag}),
         .ready_out (core_rsp_ready)
@@ -259,7 +259,7 @@ module VX_shared_mem #(
 `IGNORE_UNUSED_END
 
     for (genvar i = 0; i < NUM_BANKS; ++i) begin
-        if (CORE_TAG_WIDTH != CORE_TAG_ID_BITS && CORE_TAG_ID_BITS != 0) begin        
+        if (CORE_TAG_WIDTH != CORE_TAG_ID_BITS && CORE_TAG_ID_BITS != 0) begin
             assign req_id_st0[i] = per_bank_core_req_tag_unqual[i][`CACHE_REQ_ID_RNG];
             assign req_id_st1[i] = per_bank_core_req_tag[i][`CACHE_REQ_ID_RNG];
         end else begin
@@ -269,7 +269,7 @@ module VX_shared_mem #(
     end
 
 `ifdef DBG_TRACE_CACHE_BANK
-    
+
     reg is_multi_tag_req;
 `IGNORE_UNUSED_BEGIN
     reg [CORE_TAG_WIDTH-1:0] core_req_tag_sel;
@@ -288,16 +288,16 @@ module VX_shared_mem #(
     always @(*) begin
         is_multi_tag_req = 0;
         for (integer i = 0; i < NUM_BANKS; ++i) begin
-            if (per_bank_core_req_valid[i] 
+            if (per_bank_core_req_valid[i]
              && (core_req_tag_sel[CORE_TAG_ID_BITS-1:0] != per_bank_core_req_tag[i][CORE_TAG_ID_BITS-1:0])) begin
                 is_multi_tag_req = creq_out_valid;
             end
         end
     end
 
-    always @(posedge clk) begin        
+    always @(posedge clk) begin
         if (!crsq_in_ready) begin
-            dpi_trace("%d: *** cache%0d pipeline-stall\n", $time, CACHE_ID);        
+            dpi_trace("%d: *** cache%0d pipeline-stall\n", $time, CACHE_ID);
         end
         if (is_multi_tag_req) begin
             dpi_trace("%d: *** cache%0d multi-tag request!\n", $time, CACHE_ID);
@@ -306,10 +306,10 @@ module VX_shared_mem #(
             for (integer i = 0; i < NUM_BANKS; ++i) begin
                 if (per_bank_core_req_valid_unqual[i]) begin
                     if (per_bank_core_req_rw_unqual[i]) begin
-                        dpi_trace("%d: smem%0d:%0d core-wr-req: addr=%0h, tag=%0h, byteen=%b, data=%0h (#%0d)\n", 
+                        dpi_trace("%d: smem%0d:%0d core-wr-req: addr=%0h, tag=%0h, byteen=%b, data=%0h (#%0d)\n",
                             $time, CACHE_ID, i, `LINE_TO_BYTE_ADDR(per_bank_core_req_addr_unqual[i], i), per_bank_core_req_tag_unqual[i], per_bank_core_req_byteen_unqual[i], per_bank_core_req_data_unqual[i], req_id_st0[i]);
                     end else begin
-                        dpi_trace("%d: smem%0d:%0d core-rd-req: addr=%0h, tag=%0h (#%0d)\n", 
+                        dpi_trace("%d: smem%0d:%0d core-rd-req: addr=%0h, tag=%0h (#%0d)\n",
                             $time, CACHE_ID, i, `LINE_TO_BYTE_ADDR(per_bank_core_req_addr_unqual[i], i), per_bank_core_req_tag_unqual[i], req_id_st0[i]);
                     end
                 end
@@ -319,16 +319,16 @@ module VX_shared_mem #(
             for (integer i = 0; i < NUM_BANKS; ++i) begin
                 if (per_bank_core_req_valid[i]) begin
                     if (per_bank_core_req_rw[i]) begin
-                        dpi_trace("%d: smem%0d:%0d core-wr-rsp: addr=%0h, tag=%0h, data=%0h (#%0d)\n", 
+                        dpi_trace("%d: smem%0d:%0d core-wr-rsp: addr=%0h, tag=%0h, data=%0h (#%0d)\n",
                             $time, CACHE_ID, i, `LINE_TO_BYTE_ADDR(per_bank_core_req_addr[i], i), per_bank_core_req_tag[i], per_bank_core_req_data[i], req_id_st1[i]);
                     end else begin
-                        dpi_trace("%d: smem%0d:%0d core-rd-rsp: addr=%0h, tag=%0h, data=%0h (#%0d)\n", 
+                        dpi_trace("%d: smem%0d:%0d core-rd-rsp: addr=%0h, tag=%0h, data=%0h (#%0d)\n",
                             $time, CACHE_ID, i, `LINE_TO_BYTE_ADDR(per_bank_core_req_addr[i], i), per_bank_core_req_tag[i], per_bank_core_rsp_data[i], req_id_st1[i]);
                     end
                 end
             end
         end
-    end    
+    end
 `endif
 
 `ifdef PERF_ENABLE

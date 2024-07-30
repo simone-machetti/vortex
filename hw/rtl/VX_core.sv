@@ -1,24 +1,24 @@
 `include "VX_define.vh"
 
-module VX_core #( 
+module VX_core #(
     parameter CORE_ID = 0
-) (        
+) (
     `SCOPE_IO_VX_core
-    
+
     // Clock
     input  wire                             clk,
     input  wire                             reset,
 
     // Memory request
     output wire                             mem_req_valid,
-    output wire                             mem_req_rw,    
+    output wire                             mem_req_rw,
     output wire [`DCACHE_MEM_BYTEEN_WIDTH-1:0] mem_req_byteen,
     output wire [`DCACHE_MEM_ADDR_WIDTH-1:0] mem_req_addr,
     output wire [`DCACHE_MEM_DATA_WIDTH-1:0] mem_req_data,
     output wire [`L1_MEM_TAG_WIDTH-1:0]     mem_req_tag,
     input  wire                             mem_req_ready,
 
-    // Memory reponse    
+    // Memory reponse
     input  wire                             mem_rsp_valid,
     input  wire [`DCACHE_MEM_DATA_WIDTH-1:0] mem_rsp_data,
     input  wire [`L1_MEM_TAG_WIDTH-1:0]     mem_rsp_tag,
@@ -58,27 +58,27 @@ module VX_core #(
     //--
 
     VX_dcache_req_if #(
-        .NUM_REQS  (`DCACHE_NUM_REQS), 
-        .WORD_SIZE (`DCACHE_WORD_SIZE), 
+        .NUM_REQS  (`DCACHE_NUM_REQS),
+        .WORD_SIZE (`DCACHE_WORD_SIZE),
         .TAG_WIDTH (`DCACHE_CORE_TAG_WIDTH)
     ) dcache_req_if();
 
     VX_dcache_rsp_if #(
-        .NUM_REQS  (`DCACHE_NUM_REQS), 
-        .WORD_SIZE (`DCACHE_WORD_SIZE), 
+        .NUM_REQS  (`DCACHE_NUM_REQS),
+        .WORD_SIZE (`DCACHE_WORD_SIZE),
         .TAG_WIDTH (`DCACHE_CORE_TAG_WIDTH)
     ) dcache_rsp_if();
-    
+
     VX_icache_req_if #(
-        .WORD_SIZE (`ICACHE_WORD_SIZE), 
+        .WORD_SIZE (`ICACHE_WORD_SIZE),
         .TAG_WIDTH (`ICACHE_CORE_TAG_WIDTH)
     ) icache_req_if();
 
     VX_icache_rsp_if #(
-        .WORD_SIZE (`ICACHE_WORD_SIZE), 
+        .WORD_SIZE (`ICACHE_WORD_SIZE),
         .TAG_WIDTH (`ICACHE_CORE_TAG_WIDTH)
     ) icache_rsp_if();
-    
+
     VX_pipeline #(
         .CORE_ID(CORE_ID)
     ) pipeline (
@@ -99,7 +99,7 @@ module VX_core #(
         .dcache_req_tag     (dcache_req_if.tag),
         .dcache_req_ready   (dcache_req_if.ready),
 
-        // Dcache core reponse    
+        // Dcache core reponse
         .dcache_rsp_valid   (dcache_rsp_if.valid),
         .dcache_rsp_tmask   (dcache_rsp_if.tmask),
         .dcache_rsp_data    (dcache_rsp_if.data),
@@ -112,7 +112,7 @@ module VX_core #(
         .icache_req_tag     (icache_req_if.tag),
         .icache_req_ready   (icache_req_if.ready),
 
-        // Icache core reponse    
+        // Icache core reponse
         .icache_rsp_valid   (icache_rsp_if.valid),
         .icache_rsp_data    (icache_rsp_if.data),
         .icache_rsp_tag     (icache_rsp_if.tag),
@@ -120,7 +120,7 @@ module VX_core #(
 
         // Status
         .busy(busy)
-    );  
+    );
 
     //--
 
@@ -138,7 +138,7 @@ module VX_core #(
         // Core <-> Dcache
         .dcache_req_if  (dcache_req_if),
         .dcache_rsp_if  (dcache_rsp_if),
-        
+
         // Core <-> Icache
         .icache_req_if  (icache_req_if),
         .icache_rsp_if  (icache_rsp_if),
@@ -147,10 +147,5 @@ module VX_core #(
         .mem_req_if     (mem_req_if),
         .mem_rsp_if     (mem_rsp_if)
     );
-    
+
 endmodule
-
-
-
-
-

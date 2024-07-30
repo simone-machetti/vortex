@@ -16,7 +16,7 @@ module VX_stream_arbiter #(
     output wire [NUM_REQS-1:0][LANES-1:0]            ready_in,
 
     output wire [LANES-1:0]            valid_out,
-    output wire [LANES-1:0][DATAW-1:0] data_out,    
+    output wire [LANES-1:0][DATAW-1:0] data_out,
     input  wire [LANES-1:0]            ready_out
 );
     localparam LOG_NUM_REQS = `CLOG2(NUM_REQS);
@@ -49,7 +49,7 @@ module VX_stream_arbiter #(
             ) sel_arb (
                 .clk          (clk),
                 .reset        (reset),
-                .requests     (valid_in_any),  
+                .requests     (valid_in_any),
                 .enable       (sel_ready),
                 .grant_valid  (sel_valid),
 				.grant_index  (sel_index),
@@ -62,7 +62,7 @@ module VX_stream_arbiter #(
             ) sel_arb (
                 .clk          (clk),
                 .reset        (reset),
-                .requests     (valid_in_any),  
+                .requests     (valid_in_any),
                 .enable       (sel_ready),
                 .grant_valid  (sel_valid),
 				.grant_index  (sel_index),
@@ -75,8 +75,8 @@ module VX_stream_arbiter #(
             ) sel_arb (
                 .clk          (clk),
                 .reset        (reset),
-                .requests     (valid_in_any),  
-                .enable       (sel_ready),     
+                .requests     (valid_in_any),
+                .enable       (sel_ready),
                 .grant_valid  (sel_valid),
 				.grant_index  (sel_index),
                 .grant_onehot (sel_onehot)
@@ -88,8 +88,8 @@ module VX_stream_arbiter #(
             ) sel_arb (
                 .clk          (clk),
                 .reset        (reset),
-                .requests     (valid_in_any),  
-                .enable       (sel_ready),     
+                .requests     (valid_in_any),
+                .enable       (sel_ready),
                 .grant_valid  (sel_valid),
 				.grant_index  (sel_index),
                 .grant_onehot (sel_onehot)
@@ -109,7 +109,7 @@ module VX_stream_arbiter #(
             assign {valid_in_sel, data_in_sel} = valid_data_in[sel_index];
             `UNUSED_VAR (sel_valid)
         end else begin
-            assign data_in_sel  = data_in[sel_index];            
+            assign data_in_sel  = data_in[sel_index];
             assign valid_in_sel = sel_valid;
         end
 
@@ -125,9 +125,9 @@ module VX_stream_arbiter #(
             ) out_buffer (
                 .clk       (clk),
                 .reset     (reset),
-                .valid_in  (valid_in_sel[i]),        
+                .valid_in  (valid_in_sel[i]),
                 .data_in   (data_in_sel[i]),
-                .ready_in  (ready_in_sel[i]),      
+                .ready_in  (ready_in_sel[i]),
                 .valid_out (valid_out[i]),
                 .data_out  (data_out[i]),
                 .ready_out (ready_out[i])
@@ -135,14 +135,14 @@ module VX_stream_arbiter #(
         end
 
     end else begin
-    
+
         `UNUSED_VAR (clk)
         `UNUSED_VAR (reset)
-        
-        assign valid_out = valid_in;        
+
+        assign valid_out = valid_in;
         assign data_out  = data_in;
         assign ready_in  = ready_out;
 
     end
-    
+
 endmodule

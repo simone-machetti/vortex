@@ -35,7 +35,7 @@ interface VX_gpu_req_if();
         output rs2_data,
         output rs3_data,
         output rd,
-        output wb,    
+        output wb,
         input  ready
     );
 
@@ -53,7 +53,7 @@ interface VX_gpu_req_if();
         input  rs2_data,
         input  rs3_data,
         input  rd,
-        input  wb,    
+        input  wb,
         output ready
     );
 

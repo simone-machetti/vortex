@@ -6,14 +6,14 @@ module VX_elastic_buffer #(
     parameter SIZE    = 2,
     parameter OUT_REG = 0,
     parameter LUTRAM  = 0
-) ( 
+) (
     input  wire             clk,
     input  wire             reset,
 
     input  wire             valid_in,
-    output wire             ready_in,        
+    output wire             ready_in,
     input  wire [DATAW-1:0] data_in,
-    
+
     output wire [DATAW-1:0] data_out,
     input  wire             ready_out,
     output wire             valid_out
@@ -37,16 +37,16 @@ module VX_elastic_buffer #(
         ) queue (
             .clk       (clk),
             .reset     (reset),
-            .valid_in  (valid_in),        
+            .valid_in  (valid_in),
             .data_in   (data_in),
-            .ready_in  (ready_in),      
+            .ready_in  (ready_in),
             .valid_out (valid_out),
             .data_out  (data_out),
             .ready_out (ready_out)
         );
-    
+
     end else begin
-        
+
         wire empty, full;
 
         wire push = valid_in && ready_in;
@@ -63,7 +63,7 @@ module VX_elastic_buffer #(
             .push   (push),
             .pop    (pop),
             .data_in(data_in),
-            .data_out(data_out),    
+            .data_out(data_out),
             .empty  (empty),
             .full   (full),
             `UNUSED_PIN (alm_empty),

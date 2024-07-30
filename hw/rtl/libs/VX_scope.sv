@@ -1,13 +1,13 @@
 `include "VX_platform.vh"
 
 `TRACING_OFF
-module VX_scope #(     
+module VX_scope #(
     parameter DATAW  = 64,
     parameter BUSW   = 64,
     parameter SIZE   = 16,
     parameter UPDW   = 1,
     parameter DELTAW = 16
-) ( 
+) (
     input wire clk,
     input wire reset,
     input wire start,
@@ -90,8 +90,8 @@ module VX_scope #(
                     CMD_GET_WIDTH,
                     CMD_GET_OFFSET,
                     CMD_GET_COUNT: get_cmd <= $bits(get_cmd)'(cmd_type);
-                    CMD_SET_START: begin 
-                        delay_val <= $bits(delay_val)'(cmd_data); 
+                    CMD_SET_START: begin
+                        delay_val <= $bits(delay_val)'(cmd_data);
                         cmd_start <= 1;
                     `ifdef DBG_TRACE_SCOPE
                         dpi_trace("%d: *** scope: CMD_SET_START: delay_val=%0d\n", $time, $bits(delay_val)'(cmd_data));
@@ -135,7 +135,7 @@ module VX_scope #(
                 `ifdef DBG_TRACE_SCOPE
                     dpi_trace("%d: *** scope: recording start - start_time=%0d\n", $time, timestamp);
                 `endif
-                end 
+                end
             end
 
             if (recording) begin

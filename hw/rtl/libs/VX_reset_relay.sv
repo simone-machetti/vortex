@@ -7,15 +7,15 @@ module VX_reset_relay #(
     input wire  clk,
     input wire  reset,
     output wire [N-1:0] reset_o
-); 
-    
+);
+
     if (DEPTH > 1) begin
         `PRESERVE_REG `DISABLE_BRAM reg [N-1:0] reset_r [DEPTH-1:0];
         always @(posedge clk) begin
             for (integer i = DEPTH-1; i > 0; --i)
                 reset_r[i] <= reset_r[i-1];
             reset_r[0] <= {N{reset}};
-        end       
+        end
         assign reset_o = reset_r[DEPTH-1];
     end else if (DEPTH == 1) begin
         `PRESERVE_REG reg [N-1:0] reset_r;
@@ -27,5 +27,5 @@ module VX_reset_relay #(
         `UNUSED_VAR (clk)
         assign reset_o = {N{reset}};
     end
-  
+
 endmodule

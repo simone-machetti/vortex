@@ -1,23 +1,23 @@
 `include "VX_platform.vh"
 
 `TRACING_OFF
-module VX_priority_encoder #( 
-    parameter N       = 1,  
+module VX_priority_encoder #(
+    parameter N       = 1,
     parameter REVERSE = 0,
     parameter MODEL   = 1,
     parameter LN      = `LOG2UP(N)
 ) (
-    input  wire [N-1:0]  data_in,  
+    input  wire [N-1:0]  data_in,
     output wire [N-1:0]  onehot,
     output wire [LN-1:0] index,
     output wire          valid_out
 );
-    wire [N-1:0] reversed; 
+    wire [N-1:0] reversed;
 
     if (REVERSE) begin
         for (genvar i = 0; i < N; ++i) begin
             assign reversed[N-i-1] = data_in[i];
-        end        
+        end
     end else begin
         assign reversed = data_in;
     end
@@ -49,7 +49,7 @@ module VX_priority_encoder #(
         VX_lzc #(
             .N (N)
         ) lzc (
-            .in_i  (reversed),            
+            .in_i  (reversed),
             .cnt_o (index),
             `UNUSED_PIN (valid_o)
         );
@@ -69,7 +69,7 @@ module VX_priority_encoder #(
         VX_lzc #(
             .N (N)
         ) lzc (
-            .in_i    (reversed),            
+            .in_i    (reversed),
             .cnt_o   (index),
             .valid_o (valid_out)
         );
@@ -81,7 +81,7 @@ module VX_priority_encoder #(
         VX_lzc #(
             .N (N)
         ) lzc (
-            .in_i    (reversed),           
+            .in_i    (reversed),
             .cnt_o   (index),
             .valid_o (valid_out)
         );
@@ -101,13 +101,13 @@ module VX_priority_encoder #(
                     onehot_r[i] = 1'b1;
                 end
             end
-        end        
+        end
 
         assign index  = index_r;
         assign onehot = onehot_r;
         assign valid_out = (| reversed);
 
-    end    
+    end
 
 endmodule
 `TRACING_ON

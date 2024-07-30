@@ -12,10 +12,10 @@ module VX_dp_ram #(
     parameter INIT_ENABLE = 0,
     parameter INIT_FILE   = "",
     parameter [DATAW-1:0] INIT_VALUE = 0
-) ( 
+) (
     input wire               clk,
     input wire [BYTEENW-1:0] wren,
-    input wire [ADDRW-1:0]   waddr,        
+    input wire [ADDRW-1:0]   waddr,
     input wire [DATAW-1:0]   wdata,
     input wire [ADDRW-1:0]   raddr,
     output wire [DATAW-1:0]  rdata
@@ -36,7 +36,7 @@ module VX_dp_ram #(
 
 `ifdef SYNTHESIS
     if (LUTRAM) begin
-        if (OUT_REG) begin        
+        if (OUT_REG) begin
             reg [DATAW-1:0] rdata_r;
             if (BYTEENW > 1) begin
                 `USE_FAST_BRAM reg [BYTEENW-1:0][7:0] ram [SIZE-1:0];
@@ -85,7 +85,7 @@ module VX_dp_ram #(
                         ram[waddr] <= wdata;
                 end
                 assign rdata = ram[raddr];
-            end         
+            end
         end
     end else begin
         if (OUT_REG) begin
@@ -163,7 +163,7 @@ module VX_dp_ram #(
                             ram[waddr] <= wdata;
                     end
                     assign rdata = ram[raddr];
-                end                
+                end
             end
         end
     end
@@ -212,7 +212,7 @@ module VX_dp_ram #(
                 prev_data  <= ram[waddr];
                 prev_waddr <= waddr;
             end
-            
+
             if (LUTRAM || !NO_RWCHECK) begin
                 `UNUSED_VAR (prev_write)
                 `UNUSED_VAR (prev_data)

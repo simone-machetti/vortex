@@ -12,7 +12,7 @@ module VX_sp_ram #(
     parameter INIT_ENABLE = 0,
     parameter INIT_FILE   = "",
     parameter [DATAW-1:0] INIT_VALUE = 0
-) (  
+) (
     input wire               clk,
     input wire [ADDRW-1:0]   addr,
     input wire [BYTEENW-1:0] wren,
@@ -35,7 +35,7 @@ module VX_sp_ram #(
 
 `ifdef SYNTHESIS
     if (LUTRAM) begin
-        if (OUT_REG) begin        
+        if (OUT_REG) begin
             reg [DATAW-1:0] rdata_r;
 
             if (BYTEENW > 1) begin
@@ -85,7 +85,7 @@ module VX_sp_ram #(
                         ram[addr] <= wdata;
                 end
                 assign rdata = ram[addr];
-            end         
+            end
         end
     end else begin
         if (OUT_REG) begin
@@ -146,7 +146,7 @@ module VX_sp_ram #(
 
                     `RAM_INITIALIZATION
 
-                    always @(posedge clk) begin                        
+                    always @(posedge clk) begin
                         for (integer i = 0; i < BYTEENW; i++) begin
                             if (wren[i])
                                 ram[addr][i] <= wdata[i * 8 +: 8];
@@ -156,14 +156,14 @@ module VX_sp_ram #(
                 end else begin
                     reg [DATAW-1:0] ram [SIZE-1:0];
 
-                    `RAM_INITIALIZATION  
+                    `RAM_INITIALIZATION
 
                     always @(posedge clk) begin
                         if (wren)
                             ram[addr] <= wdata;
                     end
                     assign rdata = ram[addr];
-                end                
+                end
             end
         end
     end
@@ -212,7 +212,7 @@ module VX_sp_ram #(
                 prev_data  <= ram[addr];
                 prev_addr  <= addr;
             end
-            
+
             if (LUTRAM || !NO_RWCHECK) begin
                 `UNUSED_VAR (prev_write)
                 `UNUSED_VAR (prev_data)
@@ -227,7 +227,7 @@ module VX_sp_ram #(
             reg [ADDRW-1:0] prev_addr;
             reg prev_write;
 
-            `RAM_INITIALIZATION  
+            `RAM_INITIALIZATION
 
             always @(posedge clk) begin
                 if (wren)
@@ -246,7 +246,7 @@ module VX_sp_ram #(
             end
         end
     end
-`endif    
+`endif
 
 endmodule
 `TRACING_ON

@@ -10,7 +10,7 @@
 
 `define PORTS_BITS              `LOG2UP(NUM_PORTS)
 
-//                                tag              valid  tid          word_sel              
+//                                tag              valid  tid          word_sel
 `define MSHR_DATA_WIDTH         ((CORE_TAG_WIDTH + 1 +    `REQS_BITS + `UP(`WORD_SELECT_BITS)) * NUM_PORTS)
 
 `define WORD_WIDTH              (8 * WORD_SIZE)

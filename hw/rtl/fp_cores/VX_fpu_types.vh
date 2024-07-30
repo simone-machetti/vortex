@@ -12,7 +12,7 @@ typedef struct packed {
     logic is_inf;
     logic is_nan;
     logic is_quiet;
-    logic is_signaling;    
+    logic is_signaling;
 } fp_class_t;
 
 `define FP_CLASS_BITS  $bits(fpu_types::fp_class_t)

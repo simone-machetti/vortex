@@ -10,16 +10,16 @@ interface VX_mem_req_if #(
     parameter DATA_SIZE  = DATA_WIDTH / 8
 ) ();
 
-    wire                    valid;    
-    wire                    rw;    
+    wire                    valid;
+    wire                    rw;
     wire [DATA_SIZE-1:0]    byteen;
     wire [ADDR_WIDTH-1:0]   addr;
-    wire [DATA_WIDTH-1:0]   data;  
-    wire [TAG_WIDTH-1:0]    tag;  
+    wire [DATA_WIDTH-1:0]   data;
+    wire [TAG_WIDTH-1:0]    tag;
     wire                    ready;
 
     modport master (
-        output valid,    
+        output valid,
         output rw,
         output byteen,
         output addr,
@@ -29,7 +29,7 @@ interface VX_mem_req_if #(
     );
 
     modport slave (
-        input  valid,   
+        input  valid,
         input  rw,
         input  byteen,
         input  addr,

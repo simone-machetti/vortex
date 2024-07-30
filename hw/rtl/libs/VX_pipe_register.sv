@@ -1,9 +1,9 @@
 `include "VX_platform.vh"
 
 `TRACING_OFF
-module VX_pipe_register #( 
-    parameter DATAW  = 1, 
-    parameter RESETW = DATAW, 
+module VX_pipe_register #(
+    parameter DATAW  = 1,
+    parameter RESETW = DATAW,
     parameter DEPTH  = 1
 ) (
     input wire              clk,
@@ -13,12 +13,12 @@ module VX_pipe_register #(
     output wire [DATAW-1:0] data_out
 );
 
-    if (DEPTH == 0) begin        
+    if (DEPTH == 0) begin
         `UNUSED_VAR (clk)
         `UNUSED_VAR (reset)
         `UNUSED_VAR (enable)
-        assign data_out = data_in;  
-    end else if (DEPTH == 1) begin        
+        assign data_out = data_in;
+    end else if (DEPTH == 1) begin
         if (RESETW == 0) begin
             `UNUSED_VAR (reset)
             reg [DATAW-1:0] value;
@@ -56,7 +56,7 @@ module VX_pipe_register #(
                 if (enable) begin
                     value_d <= data_in[DATAW-RESETW-1:0];
                 end
-            end        
+            end
             assign data_out = {value_r, value_d};
         end
     end else begin

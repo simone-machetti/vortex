@@ -11,7 +11,7 @@ module VX_divider #(
     parameter LATENCY = 0
 ) (
     input wire clk,
-    input wire enable, 
+    input wire enable,
     input wire [WIDTHN-1:0] numer,
     input wire [WIDTHD-1:0] denom,
     output wire [WIDTHQ-1:0] quotient,
@@ -24,7 +24,7 @@ module VX_divider #(
     wire [WIDTHD-1:0] remainder_unqual;
 
     lpm_divide divide (
-        .clock    (clk),        
+        .clock    (clk),
         .clken    (enable),
         .numer    (numer),
         .denom    (denom),
@@ -34,7 +34,7 @@ module VX_divider #(
 
     defparam
         divide.lpm_type     = "LPM_DIVIDE",
-        divide.lpm_widthn   = WIDTHN,        
+        divide.lpm_widthn   = WIDTHN,
         divide.lpm_widthd   = WIDTHD,
         divide.lpm_nrepresentation = NSIGNED ? "SIGNED" : "UNSIGNED",
         divide.lpm_drepresentation = DSIGNED ? "SIGNED" : "UNSIGNED",
@@ -49,23 +49,23 @@ module VX_divider #(
     reg [WIDTHN-1:0] quotient_unqual;
     reg [WIDTHD-1:0] remainder_unqual;
 
-    always @(*) begin   
+    always @(*) begin
         begin
             if (NSIGNED && DSIGNED) begin
                 quotient_unqual  = $signed(numer) / $signed(denom);
                 remainder_unqual = $signed(numer) % $signed(denom);
-            end 
+            end
             else if (NSIGNED && !DSIGNED) begin
                 quotient_unqual  = $signed(numer) / denom;
                 remainder_unqual = $signed(numer) % denom;
-            end 
+            end
             else if (!NSIGNED && DSIGNED) begin
                 quotient_unqual  = numer / $signed(denom);
                 remainder_unqual = numer % $signed(denom);
-            end 
+            end
             else begin
                 quotient_unqual  = numer / denom;
-                remainder_unqual = numer % denom;        
+                remainder_unqual = numer % denom;
             end
         end
     end
@@ -78,7 +78,7 @@ module VX_divider #(
         reg [WIDTHD-1:0] remainder_pipe [LATENCY-1:0];
 
         for (genvar i = 0; i < LATENCY; i++) begin
-            always @(posedge clk) begin                
+            always @(posedge clk) begin
                 if (enable) begin
                     quotient_pipe[i]  <= (0 == i) ? quotient_unqual  : quotient_pipe[i-1];
                     remainder_pipe[i] <= (0 == i) ? remainder_unqual : remainder_pipe[i-1];
@@ -88,7 +88,7 @@ module VX_divider #(
 
         assign quotient  = quotient_pipe[LATENCY-1][WIDTHQ-1:0];
         assign remainder = remainder_pipe[LATENCY-1][WIDTHR-1:0];
-    end    
+    end
 
 `endif
 

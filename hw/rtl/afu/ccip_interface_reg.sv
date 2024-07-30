@@ -12,19 +12,19 @@ module ccip_interface_reg(
   // Interface structures
   input           t_if_ccip_Rx      pck_cp2af_sRx_T0,        // CCI-P Rx Port
   input           t_if_ccip_Tx      pck_af2cp_sTx_T0,        // CCI-P Tx Port
-  
+
   output          logic             pck_cp2af_softReset_T1,
-  output          logic [1:0]       pck_cp2af_pwrState_T1, 
-  output          logic             pck_cp2af_error_T1,    
-                                    
-  output          t_if_ccip_Rx      pck_cp2af_sRx_T1,      
+  output          logic [1:0]       pck_cp2af_pwrState_T1,
+  output          logic             pck_cp2af_error_T1,
+
+  output          t_if_ccip_Rx      pck_cp2af_sRx_T1,
   output          t_if_ccip_Tx      pck_af2cp_sTx_T1
 
 );
 (* preserve *) logic             pck_cp2af_softReset_T0_q;
 (* preserve *) logic [1:0]       pck_cp2af_pwrState_T0_q;
 (* preserve *) logic             pck_cp2af_error_T0_q;
-(* preserve *) t_if_ccip_Rx      pck_cp2af_sRx_T0_q;     
+(* preserve *) t_if_ccip_Rx      pck_cp2af_sRx_T0_q;
 (* preserve *) t_if_ccip_Tx      pck_af2cp_sTx_T0_q;
 
 always@(posedge pClk)

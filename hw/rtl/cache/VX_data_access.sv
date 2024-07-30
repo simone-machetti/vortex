@@ -4,11 +4,11 @@ module VX_data_access #(
     parameter CACHE_ID          = 0,
     parameter BANK_ID           = 0,
     // Size of cache in bytes
-    parameter CACHE_SIZE        = 1, 
+    parameter CACHE_SIZE        = 1,
     // Size of line inside a bank in bytes
-    parameter CACHE_LINE_SIZE   = 1, 
+    parameter CACHE_LINE_SIZE   = 1,
     // Number of banks
-    parameter NUM_BANKS         = 1, 
+    parameter NUM_BANKS         = 1,
     // Number of ports per banks
     parameter NUM_PORTS         = 1,
     // Size of a word in bytes
@@ -28,7 +28,7 @@ module VX_data_access #(
     input wire                          stall,
 
     input wire                          read,
-    input wire                          fill, 
+    input wire                          fill,
     input wire                          write,
     input wire[`LINE_ADDR_WIDTH-1:0]    addr,
     input wire [NUM_PORTS-1:0][WORD_SELECT_BITS-1:0] wsel,
@@ -70,7 +70,7 @@ module VX_data_access #(
                 end
             end else begin
                 `UNUSED_VAR (pmask)
-                always @(*) begin                
+                always @(*) begin
                     wdata_r = {`WORDS_PER_LINE{write_data}};
                     wren_r  = 0;
                     wren_r[wsel] = byteen;
@@ -117,17 +117,17 @@ module VX_data_access #(
     `UNUSED_VAR (stall)
 
 `ifdef DBG_TRACE_CACHE_DATA
-    always @(posedge clk) begin 
+    always @(posedge clk) begin
         if (fill && ~stall) begin
             dpi_trace("%d: cache%0d:%0d data-fill: addr=%0h, blk_addr=%0d, data=%0h\n", $time, CACHE_ID, BANK_ID, `LINE_TO_BYTE_ADDR(addr, BANK_ID), line_addr, fill_data);
         end
         if (read && ~stall) begin
             dpi_trace("%d: cache%0d:%0d data-read: addr=%0h, blk_addr=%0d, data=%0h (#%0d)\n", $time, CACHE_ID, BANK_ID, `LINE_TO_BYTE_ADDR(addr, BANK_ID), line_addr, read_data, req_id);
-        end 
+        end
         if (write && ~stall) begin
             dpi_trace("%d: cache%0d:%0d data-write: addr=%0h, byteen=%b, blk_addr=%0d, data=%0h (#%0d)\n", $time, CACHE_ID, BANK_ID, `LINE_TO_BYTE_ADDR(addr, BANK_ID), byteen, line_addr, write_data, req_id);
-        end      
-    end    
+        end
+    end
 `endif
 
 endmodule

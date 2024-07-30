@@ -8,10 +8,10 @@ interface VX_icache_rsp_if #(
     parameter TAG_WIDTH = 1
 ) ();
 
-    wire                    valid;    
+    wire                    valid;
     wire [`WORD_WIDTH-1:0]  data;
-    wire [TAG_WIDTH-1:0]    tag;    
-    wire                    ready;    
+    wire [TAG_WIDTH-1:0]    tag;
+    wire                    ready;
 
     modport master (
         output valid,
@@ -25,7 +25,7 @@ interface VX_icache_rsp_if #(
         input  data,
         input  tag,
         output ready
-    );  
+    );
 
 endinterface
 
