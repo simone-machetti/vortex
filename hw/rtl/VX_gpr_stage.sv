@@ -33,33 +33,23 @@ module VX_gpr_stage #(
     assign raddr2 = {gpr_req_if.wid, gpr_req_if.rs2};
 
     for (genvar i = 0; i < `NUM_THREADS; ++i) begin
-        double_port_mem_wrapper #(
-            .DATAW   (32),
-            .SIZE    (RAM_SIZE),
-            .OUT_REG (0)
-        ) dp_ram1_i (
-            .clk_i   (clk),
-            .rst_ni  (~reset),
-            .wren_i  (wren[i]),
-            .waddr_i (waddr),
-            .wdata_i (writeback_if.data[i]),
-            .raddr_i (raddr1),
-            .rdata_o (gpr_rsp_if.rs1_data[i])
+
+        triple_port_mem_wrapper #(
+            .DATAW     (32),
+            .SIZE      (RAM_SIZE),
+            .OUT_REG   (0)
+        ) triple_port_mem_wrapper_i (
+            .clk_i     (clk),
+            .rst_ni    (~reset),
+            .wren_i    (wren[i]),
+            .waddr_i   (waddr),
+            .wdata_i   (writeback_if.data[i]),
+            .raddr_1_i (raddr1),
+            .rdata_1_o (gpr_rsp_if.rs1_data[i]),
+            .raddr_2_i (raddr2),
+            .rdata_2_o (gpr_rsp_if.rs2_data[i])
         );
 
-        double_port_mem_wrapper #(
-            .DATAW   (32),
-            .SIZE    (RAM_SIZE),
-            .OUT_REG (0)
-        ) dp_ram2_i (
-            .clk_i   (clk),
-            .rst_ni  (~reset),
-            .wren_i  (wren[i]),
-            .waddr_i (waddr),
-            .wdata_i (writeback_if.data[i]),
-            .raddr_i (raddr2),
-            .rdata_o (gpr_rsp_if.rs2_data[i])
-        );
     end
 
 `ifdef EXT_F_ENABLE
