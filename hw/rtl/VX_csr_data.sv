@@ -140,7 +140,7 @@ module VX_csr_data #(
 
             `CSR_NT         : read_data_r = `NUM_THREADS;
             `CSR_NW         : read_data_r = `NUM_WARPS;
-            `CSR_NC         : read_data_r = `NUM_CORES * `NUM_CLUSTERS;
+            `CSR_NC         : read_data_r = `NUM_COMPUTE_UNITS;
 
             `CSR_MCYCLE     : read_data_r = csr_cycle[31:0];
             `CSR_MCYCLE_H   : read_data_r = 32'(csr_cycle[`PERF_CTR_BITS-1:32]);

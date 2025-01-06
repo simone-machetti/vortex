@@ -357,7 +357,7 @@
 `define L2_MEM_BYTEEN_WIDTH      `L2_CACHE_LINE_SIZE
 
 // Input request size
-`define L2_NUM_REQS              `NUM_CORES
+`define L2_NUM_REQS              (2 * `NUM_COMPUTE_UNITS)
 
 // Memory request tag bits
 `define _L2_MEM_ADDR_RATIO_W     $clog2(`L2_CACHE_LINE_SIZE / `L2_WORD_SIZE)

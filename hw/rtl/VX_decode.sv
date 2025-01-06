@@ -30,7 +30,9 @@ module VX_decode  #(
     // outputs
     VX_decode_if.master decode_if,
     VX_wstall_if.master wstall_if,
-    VX_join_if.master   join_if
+    VX_join_if.master   join_if,
+
+    output logic sleep_req_o
 );
     `UNUSED_PARAM (CORE_ID)
     `UNUSED_VAR (clk)
@@ -79,6 +81,7 @@ module VX_decode  #(
         use_rd    = 0;
         is_join   = 0;
         is_wstall = 0;
+        sleep_req_o = 1'b0;
 
         case (opcode)
             `INST_I: begin
@@ -102,7 +105,7 @@ module VX_decode  #(
             end
             `INST_R: begin
                 ex_type = `EX_ALU;
-            `ifdef EXT_F_ENABLE
+            `ifdef EXT_M_ENABLE
                 if (func7[0]) begin
                     case (func3)
                         3'h0: op_type = `INST_OP_BITS'(`INST_MUL_MUL);
@@ -382,6 +385,16 @@ module VX_decode  #(
                         ex_type = `EX_LSU;
                         op_type = `INST_OP_BITS'(`INST_LSU_LW);
                         op_mod  = `INST_MOD_BITS'(2);
+                        `USED_IREG (rs1);
+                    end
+                    3'h6: begin
+                        sleep_req_o = 1'b1;
+                        ex_type     = `EX_ALU;
+                        op_type     = `INST_OP_BITS'(`INST_ALU_ADD);
+                        use_rd      = 1;
+                        use_imm     = 1;
+                        imm         = {{20{alu_imm[11]}}, alu_imm};
+                        `USED_IREG (rd);
                         `USED_IREG (rs1);
                     end
                     default:;

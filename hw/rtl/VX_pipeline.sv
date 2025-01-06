@@ -42,7 +42,9 @@ module VX_pipeline #(
 `endif
 
     // Status
-    output wire                             busy
+    output wire                             busy,
+
+    output logic                            sleep_req_o
 );
     //
     // Dcache request
@@ -171,7 +173,8 @@ module VX_pipeline #(
         .ifetch_rsp_if  (ifetch_rsp_if),
         .decode_if      (decode_if),
         .wstall_if      (wstall_if),
-        .join_if        (join_if)
+        .join_if        (join_if),
+        .sleep_req_o    (sleep_req_o)
     );
 
     VX_issue #(

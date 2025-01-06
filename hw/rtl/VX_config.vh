@@ -1,7 +1,8 @@
 `ifndef VX_CONFIG
 `define VX_CONFIG
 
-`define EXT_M_DISABLE
+`include "e_gpu.vh"
+
 `define EXT_F_DISABLE
 
 `ifndef XLEN
@@ -9,19 +10,19 @@
 `endif
 
 `ifndef NUM_CLUSTERS
-`define NUM_CLUSTERS 1
+`define NUM_CLUSTERS 0
 `endif
 
 `ifndef NUM_CORES
-`define NUM_CORES 1
+`define NUM_CORES 0
 `endif
 
 `ifndef NUM_WARPS
-`define NUM_WARPS 2
+`define NUM_WARPS 0
 `endif
 
 `ifndef NUM_THREADS
-`define NUM_THREADS 4
+`define NUM_THREADS 0
 `endif
 
 `ifndef NUM_BARRIERS
@@ -409,7 +410,7 @@
 
 // Number of banks
 `ifndef L2_NUM_BANKS
-`define L2_NUM_BANKS ((`NUM_CORES < 4) ? `NUM_CORES : 4)
+`define L2_NUM_BANKS (2 * `NUM_COMPUTE_UNITS)
 `endif
 
 // Number of ports per bank
