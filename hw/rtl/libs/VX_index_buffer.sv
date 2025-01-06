@@ -67,17 +67,18 @@ module VX_index_buffer #(
         end
     end
 
-    VX_dp_ram #(
-        .DATAW  (DATAW),
-        .SIZE   (SIZE),
-        .LUTRAM (LUTRAM)
-    ) data_table (
-        .clk   (clk),
-        .wren  (acquire_slot),
-        .waddr (write_addr_r),
-        .wdata (write_data),
-        .raddr (read_addr),
-        .rdata (read_data)
+    double_port_mem_wrapper #(
+        .DATAW   (DATAW),
+        .SIZE    (SIZE),
+        .OUT_REG (0)
+    ) data_table_i (
+        .clk_i   (clk),
+        .rst_ni  (~reset),
+        .wren_i  (acquire_slot),
+        .waddr_i (write_addr_r),
+        .wdata_i (write_data),
+        .raddr_i (read_addr),
+        .rdata_o (read_data)
     );
 
     assign write_addr = write_addr_r;

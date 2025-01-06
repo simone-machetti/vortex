@@ -33,32 +33,32 @@ module VX_gpr_stage #(
     assign raddr2 = {gpr_req_if.wid, gpr_req_if.rs2};
 
     for (genvar i = 0; i < `NUM_THREADS; ++i) begin
-        VX_dp_ram #(
-            .DATAW       (32),
-            .SIZE        (RAM_SIZE),
-            .INIT_ENABLE (1),
-            .INIT_VALUE  (0)
-        ) dp_ram1 (
-            .clk   (clk),
-            .wren  (wren[i]),
-            .waddr (waddr),
-            .wdata (writeback_if.data[i]),
-            .raddr (raddr1),
-            .rdata (gpr_rsp_if.rs1_data[i])
+        double_port_mem_wrapper #(
+            .DATAW   (32),
+            .SIZE    (RAM_SIZE),
+            .OUT_REG (0)
+        ) dp_ram1_i (
+            .clk_i   (clk),
+            .rst_ni  (~reset),
+            .wren_i  (wren[i]),
+            .waddr_i (waddr),
+            .wdata_i (writeback_if.data[i]),
+            .raddr_i (raddr1),
+            .rdata_o (gpr_rsp_if.rs1_data[i])
         );
 
-        VX_dp_ram #(
-            .DATAW       (32),
-            .SIZE        (RAM_SIZE),
-            .INIT_ENABLE (1),
-            .INIT_VALUE  (0)
-        ) dp_ram2 (
-            .clk   (clk),
-            .wren  (wren[i]),
-            .waddr (waddr),
-            .wdata (writeback_if.data[i]),
-            .raddr (raddr2),
-            .rdata (gpr_rsp_if.rs2_data[i])
+        double_port_mem_wrapper #(
+            .DATAW   (32),
+            .SIZE    (RAM_SIZE),
+            .OUT_REG (0)
+        ) dp_ram2_i (
+            .clk_i   (clk),
+            .rst_ni  (~reset),
+            .wren_i  (wren[i]),
+            .waddr_i (waddr),
+            .wdata_i (writeback_if.data[i]),
+            .raddr_i (raddr2),
+            .rdata_o (gpr_rsp_if.rs2_data[i])
         );
     end
 
@@ -67,18 +67,18 @@ module VX_gpr_stage #(
     assign raddr3 = {gpr_req_if.wid, gpr_req_if.rs3};
 
     for (genvar i = 0; i < `NUM_THREADS; ++i) begin
-        VX_dp_ram #(
-            .DATAW       (32),
-            .SIZE        (RAM_SIZE),
-            .INIT_ENABLE (1),
-            .INIT_VALUE  (0)
-        ) dp_ram3 (
-            .clk   (clk),
-            .wren  (wren[i]),
-            .waddr (waddr),
-            .wdata (writeback_if.data[i]),
-            .raddr (raddr3),
-            .rdata (gpr_rsp_if.rs3_data[i])
+        double_port_mem_wrapper #(
+            .DATAW   (32),
+            .SIZE    (RAM_SIZE),
+            .OUT_REG (0)
+        ) dp_ram3_i (
+            .clk_i   (clk),
+            .rst_ni  (~reset),
+            .wren_i  (wren[i]),
+            .waddr_i (waddr),
+            .wdata_i (writeback_if.data[i]),
+            .raddr_i (raddr3),
+            .rdata_o (gpr_rsp_if.rs3_data[i])
         );
     end
 `else

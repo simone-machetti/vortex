@@ -35,17 +35,18 @@ module VX_icache_stage #(
     wire [31:0] rsp_PC;
     wire [`NUM_THREADS-1:0] rsp_tmask;
 
-    VX_dp_ram #(
-        .DATAW  (32 + `NUM_THREADS + `UUID_BITS),
-        .SIZE   (`NUM_WARPS),
-        .LUTRAM (1)
-    ) req_metadata (
-        .clk   (clk),
-        .wren  (icache_req_fire),
-        .waddr (req_tag),
-        .wdata ({ifetch_req_if.PC, ifetch_req_if.tmask, ifetch_req_if.uuid}),
-        .raddr (rsp_tag),
-        .rdata ({rsp_PC, rsp_tmask, rsp_uuid})
+    double_port_mem_wrapper #(
+        .DATAW   (32 + `NUM_THREADS + `UUID_BITS),
+        .SIZE    (`NUM_WARPS),
+        .OUT_REG (0)
+    ) req_metadata_i (
+        .clk_i   (clk),
+        .rst_ni  (~reset),
+        .wren_i  (icache_req_fire),
+        .waddr_i (req_tag),
+        .wdata_i ({ifetch_req_if.PC, ifetch_req_if.tmask, ifetch_req_if.uuid}),
+        .raddr_i (rsp_tag),
+        .rdata_o ({rsp_PC, rsp_tmask, rsp_uuid})
     );
 
     `RUNTIME_ASSERT((!ifetch_req_if.valid || ifetch_req_if.PC >= `STARTUP_ADDR),

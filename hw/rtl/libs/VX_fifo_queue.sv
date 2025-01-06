@@ -153,18 +153,18 @@ module VX_fifo_queue #(
                     end
                 end
 
-                VX_dp_ram #(
+                double_port_mem_wrapper #(
                     .DATAW   (DATAW),
                     .SIZE    (SIZE),
-                    .OUT_REG (0),
-                    .LUTRAM  (LUTRAM)
-                ) dp_ram (
-                    .clk(clk),
-                    .wren  (push),
-                    .waddr (wr_ptr_r),
-                    .wdata (data_in),
-                    .raddr (rd_ptr_r),
-                    .rdata (data_out)
+                    .OUT_REG (0)
+                ) dp_ram_i (
+                    .clk_i   (clk),
+                    .rst_ni  (~reset),
+                    .wren_i  (push),
+                    .waddr_i (wr_ptr_r),
+                    .wdata_i (data_in),
+                    .raddr_i (rd_ptr_r),
+                    .rdata_o (data_out)
                 );
 
             end else begin
@@ -195,18 +195,18 @@ module VX_fifo_queue #(
                     end
                 end
 
-                VX_dp_ram #(
+                double_port_mem_wrapper #(
                     .DATAW   (DATAW),
                     .SIZE    (SIZE),
-                    .OUT_REG (0),
-                    .LUTRAM  (LUTRAM)
-                ) dp_ram (
-                    .clk   (clk),
-                    .wren  (push),
-                    .waddr (wr_ptr_r),
-                    .wdata (data_in),
-                    .raddr (rd_ptr_n_r),
-                    .rdata (dout)
+                    .OUT_REG (0)
+                ) dp_ram_i (
+                    .clk_i   (clk),
+                    .rst_ni  (~reset),
+                    .wren_i  (push),
+                    .waddr_i (wr_ptr_r),
+                    .wdata_i (data_in),
+                    .raddr_i (rd_ptr_n_r),
+                    .rdata_o (dout)
                 );
 
                 always @(posedge clk) begin

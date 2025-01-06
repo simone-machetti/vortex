@@ -93,17 +93,17 @@ module VX_data_access #(
         assign wren  = fill;
     end
 
-    VX_sp_ram #(
-        .DATAW      (`CACHE_LINE_WIDTH),
-        .SIZE       (`LINES_PER_BANK),
-        .BYTEENW    (BYTEENW),
-        .NO_RWCHECK (1)
-    ) data_store (
-        .clk   (clk),
-        .addr  (line_addr),
-        .wren  (wren),
-        .wdata (wdata),
-        .rdata (rdata)
+    single_port_mem_wrapper #(
+        .DATAW   (`CACHE_LINE_WIDTH),
+        .SIZE    (`LINES_PER_BANK),
+        .BYTEENW (BYTEENW)
+    ) data_store_i (
+        .clk_i   (~clk),
+        .rst_ni  (~reset),
+        .addr_i  (line_addr),
+        .wren_i  (wren),
+        .wdata_i (wdata),
+        .rdata_o (rdata)
     );
 
     if (`WORDS_PER_LINE > 1) begin

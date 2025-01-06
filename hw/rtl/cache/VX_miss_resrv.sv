@@ -167,17 +167,18 @@ module VX_miss_resrv #(
     `RUNTIME_ASSERT((!fill_valid || valid_table[fill_id]), ("%t: *** cache%0d:%0d invalid fill: addr=%0h, id=%0d", $time, CACHE_ID, BANK_ID,
         `LINE_TO_BYTE_ADDR(addr_table[fill_id], BANK_ID), fill_id))
 
-    VX_dp_ram #(
-        .DATAW  (`MSHR_DATA_WIDTH),
-        .SIZE   (MSHR_SIZE),
-        .LUTRAM (1)
-    ) entries (
-        .clk   (clk),
-        .waddr (allocate_id_r),
-        .raddr (dequeue_id_r),
-        .wren  (allocate_valid),
-        .wdata (allocate_data),
-        .rdata (dequeue_data)
+    double_port_mem_wrapper #(
+        .DATAW   (`MSHR_DATA_WIDTH),
+        .SIZE    (MSHR_SIZE),
+        .OUT_REG (0)
+    ) entries_i (
+        .clk_i   (clk),
+        .rst_ni  (~reset),
+        .wren_i  (allocate_valid),
+        .waddr_i (allocate_id_r),
+        .wdata_i (allocate_data),
+        .raddr_i (dequeue_id_r),
+        .rdata_o (dequeue_data)
     );
 
     assign fill_addr = addr_table[fill_id];
