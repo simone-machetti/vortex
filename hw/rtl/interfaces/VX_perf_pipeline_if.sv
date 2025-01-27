@@ -4,19 +4,19 @@
 `include "VX_define.vh"
 
 interface VX_perf_pipeline_if ();
-    wire [`PERF_CTR_BITS-1:0]   loads;
-    wire [`PERF_CTR_BITS-1:0]   stores;
-    wire [`PERF_CTR_BITS-1:0]   branches;
+    logic [`PERF_CTR_BITS-1:0] loads;
+    logic [`PERF_CTR_BITS-1:0] stores;
+    logic [`PERF_CTR_BITS-1:0] branches;
 
-    wire [`PERF_CTR_BITS-1:0]   ibf_stalls;
-    wire [`PERF_CTR_BITS-1:0]   scb_stalls;
-    wire [`PERF_CTR_BITS-1:0]   lsu_stalls;
-    wire [`PERF_CTR_BITS-1:0]   csr_stalls;
-    wire [`PERF_CTR_BITS-1:0]   alu_stalls;
+    logic [`PERF_CTR_BITS-1:0] ibf_stalls;
+    logic [`PERF_CTR_BITS-1:0] scb_stalls;
+    logic [`PERF_CTR_BITS-1:0] lsu_stalls;
+    logic [`PERF_CTR_BITS-1:0] csr_stalls;
+    logic [`PERF_CTR_BITS-1:0] alu_stalls;
 `ifdef EXT_F_ENABLE
-    wire [`PERF_CTR_BITS-1:0]   fpu_stalls;
+    logic [`PERF_CTR_BITS-1:0] fpu_stalls;
 `endif
-    wire [`PERF_CTR_BITS-1:0]   gpu_stalls;
+    logic [`PERF_CTR_BITS-1:0] gpu_stalls;
 
     modport decode (
         output loads,

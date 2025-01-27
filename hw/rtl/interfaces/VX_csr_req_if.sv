@@ -5,19 +5,19 @@
 
 interface VX_csr_req_if ();
 
-    wire                    valid;
-    wire [`UUID_BITS-1:0]   uuid;
-    wire [`NW_BITS-1:0]     wid;
-    wire [`NUM_THREADS-1:0] tmask;
-    wire [31:0]             PC;
-    wire [`INST_CSR_BITS-1:0] op_type;
-    wire [`CSR_ADDR_BITS-1:0] addr;
-    wire [31:0]             rs1_data;
-    wire                    use_imm;
-    wire [`NRI_BITS-1:0]    imm;
-    wire [`NR_BITS-1:0]     rd;
-    wire                    wb;
-    wire                    ready;
+    logic                      valid;
+    logic [`UUID_BITS-1:0]     uuid;
+    logic [`NW_BITS-1:0]       wid;
+    logic [`NUM_THREADS-1:0]   tmask;
+    logic [31:0]               PC;
+    logic [`INST_CSR_BITS-1:0] op_type;
+    logic [`CSR_ADDR_BITS-1:0] addr;
+    logic [31:0]               rs1_data;
+    logic                      use_imm;
+    logic [`NRI_BITS-1:0]      imm;
+    logic [`NR_BITS-1:0]       rd;
+    logic                      wb;
+    logic                      ready;
 
     modport master (
         output valid,

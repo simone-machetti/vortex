@@ -5,30 +5,30 @@
 
 interface VX_ibuffer_if ();
 
-    wire                    valid;
-    wire [`UUID_BITS-1:0]   uuid;
-    wire [`NW_BITS-1:0]     wid;
-    wire [`NUM_THREADS-1:0] tmask;
-    wire [31:0]             PC;
-    wire [`EX_BITS-1:0]     ex_type;
-    wire [`INST_OP_BITS-1:0] op_type;
-    wire [`INST_MOD_BITS-1:0] op_mod;
-    wire                    wb;
-    wire                    use_PC;
-    wire                    use_imm;
-    wire [31:0]             imm;
-    wire [`NR_BITS-1:0]     rd;
-    wire [`NR_BITS-1:0]     rs1;
-    wire [`NR_BITS-1:0]     rs2;
-    wire [`NR_BITS-1:0]     rs3;
+    logic                      valid;
+    logic [`UUID_BITS-1:0]     uuid;
+    logic [`NW_BITS-1:0]       wid;
+    logic [`NUM_THREADS-1:0]   tmask;
+    logic [31:0]               PC;
+    logic [`EX_BITS-1:0]       ex_type;
+    logic [`INST_OP_BITS-1:0]  op_type;
+    logic [`INST_MOD_BITS-1:0] op_mod;
+    logic                      wb;
+    logic                      use_PC;
+    logic                      use_imm;
+    logic [31:0]               imm;
+    logic [`NR_BITS-1:0]       rd;
+    logic [`NR_BITS-1:0]       rs1;
+    logic [`NR_BITS-1:0]       rs2;
+    logic [`NR_BITS-1:0]       rs3;
 
-    wire [`NR_BITS-1:0]     rd_n;
-    wire [`NR_BITS-1:0]     rs1_n;
-    wire [`NR_BITS-1:0]     rs2_n;
-    wire [`NR_BITS-1:0]     rs3_n;
-    wire [`NW_BITS-1:0]     wid_n;
+    logic [`NR_BITS-1:0]       rd_n;
+    logic [`NR_BITS-1:0]       rs1_n;
+    logic [`NR_BITS-1:0]       rs2_n;
+    logic [`NR_BITS-1:0]       rs3_n;
+    logic [`NW_BITS-1:0]       wid_n;
 
-    wire                    ready;
+    logic                      ready;
 
     modport master (
         output valid,

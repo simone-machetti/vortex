@@ -5,15 +5,15 @@
 
 interface VX_writeback_if ();
 
-    wire                            valid;
-    wire [`UUID_BITS-1:0]           uuid;
-    wire [`NUM_THREADS-1:0]         tmask;
-    wire [`NW_BITS-1:0]             wid;
-    wire [31:0]                     PC;
-    wire [`NR_BITS-1:0]             rd;
-    wire [`NUM_THREADS-1:0][31:0]   data;
-    wire                            eop;
-    wire                            ready;
+    logic                          valid;
+    logic [`UUID_BITS-1:0]         uuid;
+    logic [`NUM_THREADS-1:0]       tmask;
+    logic [`NW_BITS-1:0]           wid;
+    logic [31:0]                   PC;
+    logic [`NR_BITS-1:0]           rd;
+    logic [`NUM_THREADS-1:0][31:0] data;
+    logic                          eop;
+    logic                          ready;
 
     modport master (
         output valid,

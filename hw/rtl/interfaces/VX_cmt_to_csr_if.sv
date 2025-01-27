@@ -5,11 +5,11 @@
 
 interface VX_cmt_to_csr_if ();
 
-    wire                                valid;
+    logic                                valid;
 `ifdef EXT_F_ENABLE
-    wire [$clog2(6*`NUM_THREADS+1)-1:0] commit_size;
+    logic [$clog2(6*`NUM_THREADS+1)-1:0] commit_size;
 `else
-    wire [$clog2(5*`NUM_THREADS+1)-1:0] commit_size;
+    logic [$clog2(5*`NUM_THREADS+1)-1:0] commit_size;
 `endif
     modport master (
         output valid,

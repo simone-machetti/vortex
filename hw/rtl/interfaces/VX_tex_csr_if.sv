@@ -5,10 +5,10 @@
 
 interface VX_tex_csr_if ();
 
-    wire                      write_enable;
-    wire [`CSR_ADDR_BITS-1:0] write_addr;
-    wire [31:0]               write_data;
-    wire [`UUID_BITS-1:0]     write_uuid;
+    logic                      write_enable;
+    logic [`CSR_ADDR_BITS-1:0] write_addr;
+    logic [31:0]               write_data;
+    logic [`UUID_BITS-1:0]     write_uuid;
 
     modport master (
         output write_enable,

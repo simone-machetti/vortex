@@ -5,12 +5,12 @@
 
 interface VX_ifetch_req_if ();
 
-    wire                    valid;
-    wire [`UUID_BITS-1:0]   uuid;
-    wire [`NUM_THREADS-1:0] tmask;
-    wire [`NW_BITS-1:0]     wid;
-    wire [31:0]             PC;
-    wire                    ready;
+    logic                    valid;
+    logic [`UUID_BITS-1:0]   uuid;
+    logic [`NUM_THREADS-1:0] tmask;
+    logic [`NW_BITS-1:0]     wid;
+    logic [31:0]             PC;
+    logic                    ready;
 
     modport master (
         output valid,

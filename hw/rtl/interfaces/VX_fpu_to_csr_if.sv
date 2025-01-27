@@ -5,12 +5,12 @@
 
 interface VX_fpu_to_csr_if ();
 
-    wire                 write_enable;
-    wire [`NW_BITS-1:0]  write_wid;
-    fpu_types::fflags_t  write_fflags;
+    logic                      write_enable;
+    logic [`NW_BITS-1:0]       write_wid;
+    fpu_types::fflags_t        write_fflags;
 
-    wire [`NW_BITS-1:0]  read_wid;
-    wire [`INST_FRM_BITS-1:0] read_frm;
+    logic [`NW_BITS-1:0]       read_wid;
+    logic [`INST_FRM_BITS-1:0] read_frm;
 
     modport master (
         output write_enable,

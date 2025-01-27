@@ -5,14 +5,14 @@
 
 interface VX_perf_cache_if ();
 
-    wire [`PERF_CTR_BITS-1:0] reads;
-    wire [`PERF_CTR_BITS-1:0] writes;
-    wire [`PERF_CTR_BITS-1:0] read_misses;
-    wire [`PERF_CTR_BITS-1:0] write_misses;
-    wire [`PERF_CTR_BITS-1:0] bank_stalls;
-    wire [`PERF_CTR_BITS-1:0] mshr_stalls;
-    wire [`PERF_CTR_BITS-1:0] mem_stalls;
-    wire [`PERF_CTR_BITS-1:0] crsp_stalls;
+    logic [`PERF_CTR_BITS-1:0] reads;
+    logic [`PERF_CTR_BITS-1:0] writes;
+    logic [`PERF_CTR_BITS-1:0] read_misses;
+    logic [`PERF_CTR_BITS-1:0] write_misses;
+    logic [`PERF_CTR_BITS-1:0] bank_stalls;
+    logic [`PERF_CTR_BITS-1:0] mshr_stalls;
+    logic [`PERF_CTR_BITS-1:0] mem_stalls;
+    logic [`PERF_CTR_BITS-1:0] crsp_stalls;
 
     modport master (
         output reads,

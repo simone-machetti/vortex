@@ -8,10 +8,10 @@ interface VX_icache_req_if #(
     parameter TAG_WIDTH = 1
 ) ();
 
-    wire                        valid;
-    wire [`WORD_ADDR_WIDTH-1:0] addr;
-    wire [TAG_WIDTH-1:0]        tag;
-    wire                        ready;
+    logic                        valid;
+    logic [`WORD_ADDR_WIDTH-1:0] addr;
+    logic [TAG_WIDTH-1:0]        tag;
+    logic                        ready;
 
     modport master (
         output valid,

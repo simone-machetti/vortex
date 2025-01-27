@@ -5,8 +5,8 @@
 
 interface VX_join_if ();
 
-    wire                valid;
-    wire [`NW_BITS-1:0] wid;
+    logic                valid;
+    logic [`NW_BITS-1:0] wid;
 
     modport master (
         output valid,

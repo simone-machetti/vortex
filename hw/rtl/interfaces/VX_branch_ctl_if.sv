@@ -5,10 +5,10 @@
 
 interface VX_branch_ctl_if ();
 
-    wire                valid;
-    wire [`NW_BITS-1:0] wid;
-    wire                taken;
-    wire [31:0]         dest;
+    logic                valid;
+    logic [`NW_BITS-1:0] wid;
+    logic                taken;
+    logic [31:0]         dest;
 
     modport master (
         output valid,

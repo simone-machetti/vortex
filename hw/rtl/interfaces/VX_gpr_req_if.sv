@@ -5,10 +5,10 @@
 
 interface VX_gpr_req_if ();
 
-    wire [`NW_BITS-1:0] wid;
-    wire [`NR_BITS-1:0] rs1;
-    wire [`NR_BITS-1:0] rs2;
-    wire [`NR_BITS-1:0] rs3;
+    logic [`NW_BITS-1:0] wid;
+    logic [`NR_BITS-1:0] rs1;
+    logic [`NR_BITS-1:0] rs2;
+    logic [`NR_BITS-1:0] rs3;
 
     modport master (
         output wid,

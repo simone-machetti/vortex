@@ -5,16 +5,16 @@
 
 interface VX_commit_if ();
 
-    wire                    valid;
-    wire [`UUID_BITS-1:0]   uuid;
-    wire [`NW_BITS-1:0]     wid;
-    wire [`NUM_THREADS-1:0] tmask;
-    wire [31:0]             PC;
-    wire [`NUM_THREADS-1:0][31:0] data;
-    wire [`NR_BITS-1:0]     rd;
-    wire                    wb;
-    wire                    eop;
-    wire                    ready;
+    logic                          valid;
+    logic [`UUID_BITS-1:0]         uuid;
+    logic [`NW_BITS-1:0]           wid;
+    logic [`NUM_THREADS-1:0]       tmask;
+    logic [31:0]                   PC;
+    logic [`NUM_THREADS-1:0][31:0] data;
+    logic [`NR_BITS-1:0]           rd;
+    logic                          wb;
+    logic                          eop;
+    logic                          ready;
 
     modport master (
         output valid,

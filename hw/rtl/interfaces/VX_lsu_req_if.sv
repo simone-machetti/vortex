@@ -5,20 +5,20 @@
 
 interface VX_lsu_req_if ();
 
-    wire                            valid;
-    wire [`UUID_BITS-1:0]           uuid;
-    wire [`NW_BITS-1:0]             wid;
-    wire [`NUM_THREADS-1:0]         tmask;
-    wire [31:0]                     PC;
-    wire [`INST_LSU_BITS-1:0]       op_type;
-    wire                            is_fence;
-    wire [`NUM_THREADS-1:0][31:0]   store_data;
-    wire [`NUM_THREADS-1:0][31:0]   base_addr;
-    wire [31:0]                     offset;
-    wire [`NR_BITS-1:0]             rd;
-    wire                            wb;
-    wire                            ready;
-    wire                            is_prefetch;
+    logic                          valid;
+    logic [`UUID_BITS-1:0]         uuid;
+    logic [`NW_BITS-1:0]           wid;
+    logic [`NUM_THREADS-1:0]       tmask;
+    logic [31:0]                   PC;
+    logic [`INST_LSU_BITS-1:0]     op_type;
+    logic                          is_fence;
+    logic [`NUM_THREADS-1:0][31:0] store_data;
+    logic [`NUM_THREADS-1:0][31:0] base_addr;
+    logic [31:0]                   offset;
+    logic [`NR_BITS-1:0]           rd;
+    logic                          wb;
+    logic                          ready;
+    logic                          is_prefetch;
 
     modport master (
         output valid,

@@ -5,9 +5,9 @@
 
 interface VX_wstall_if();
 
-    wire                valid;
-    wire [`NW_BITS-1:0] wid;
-    wire                stalled;
+    logic                valid;
+    logic [`NW_BITS-1:0] wid;
+    logic                stalled;
 
     modport master (
         output valid,
