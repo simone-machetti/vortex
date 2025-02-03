@@ -8,6 +8,9 @@ module VX_fetch #(
     input wire clk,
     input wire reset,
 
+    // Boot address
+    input wire [31:0] boot_address_i,
+
     // Icache interface
     VX_icache_req_if.master icache_req_if,
     VX_icache_rsp_if.slave  icache_rsp_if,
@@ -37,6 +40,8 @@ module VX_fetch #(
 
         .clk              (clk),
         .reset            (reset),
+
+        .boot_address_i   (boot_address_i),
 
         .warp_ctl_if      (warp_ctl_if),
         .wstall_if        (wstall_if),

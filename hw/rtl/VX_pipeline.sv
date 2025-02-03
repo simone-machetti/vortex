@@ -9,6 +9,9 @@ module VX_pipeline #(
     input wire                              clk,
     input wire                              reset,
 
+    // Boot address
+    input wire [31:0]                       boot_address_i,
+
     // Dcache core request
     output wire [`NUM_THREADS-1:0]          dcache_req_valid,
     output wire [`NUM_THREADS-1:0]          dcache_req_rw,
@@ -151,6 +154,7 @@ module VX_pipeline #(
         `SCOPE_BIND_VX_pipeline_fetch
         .clk            (clk),
         .reset          (fetch_reset),
+        .boot_address_i (boot_address_i),
         .icache_req_if  (icache_req_if),
         .icache_rsp_if  (icache_rsp_if),
         .wstall_if      (wstall_if),

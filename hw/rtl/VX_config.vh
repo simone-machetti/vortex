@@ -49,10 +49,6 @@
 `define L1_BLOCK_SIZE ((`L2_ENABLE || `L3_ENABLE) ? 16 : `MEM_BLOCK_SIZE)
 `endif
 
-`ifndef STARTUP_ADDR
-`define STARTUP_ADDR 32'h00000000
-`endif
-
 `ifndef IO_BASE_ADDR
 `define IO_BASE_ADDR 32'hFF000000
 `endif
