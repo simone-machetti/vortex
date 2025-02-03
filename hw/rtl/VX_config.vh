@@ -42,11 +42,11 @@
 `endif
 
 `ifndef MEM_BLOCK_SIZE
-`define MEM_BLOCK_SIZE 64
+`define MEM_BLOCK_SIZE `L1_CACHE_LINE_SIZE
 `endif
 
 `ifndef L1_BLOCK_SIZE
-`define L1_BLOCK_SIZE ((`L2_ENABLE || `L3_ENABLE) ? 16 : `MEM_BLOCK_SIZE)
+`define L1_BLOCK_SIZE `MEM_BLOCK_SIZE
 `endif
 
 `ifndef IO_BASE_ADDR
@@ -299,7 +299,7 @@
 
 // Size of cache in bytes
 `ifndef ICACHE_SIZE
-`define ICACHE_SIZE 16384
+`define ICACHE_SIZE `L1_INSTR_CACHE_SIZE
 `endif
 
 // Core Request Queue Size
@@ -331,12 +331,12 @@
 
 // Size of cache in bytes
 `ifndef DCACHE_SIZE
-`define DCACHE_SIZE 16384
+`define DCACHE_SIZE `L1_DATA_CACHE_SIZE
 `endif
 
 // Number of banks
 `ifndef DCACHE_NUM_BANKS
-`define DCACHE_NUM_BANKS `NUM_THREADS
+`define DCACHE_NUM_BANKS `L1_DATA_CACHE_NUM_BANKS
 `endif
 
 // Number of ports per bank
@@ -401,12 +401,12 @@
 
 // Size of cache in bytes
 `ifndef L2_CACHE_SIZE
-`define L2_CACHE_SIZE 131072
+`define L2_CACHE_SIZE `L2_SHARED_CACHE_SIZE
 `endif
 
 // Number of banks
 `ifndef L2_NUM_BANKS
-`define L2_NUM_BANKS (2 * `NUM_COMPUTE_UNITS)
+`define L2_NUM_BANKS `L2_SHARED_CACHE_NUM_BANKS
 `endif
 
 // Number of ports per bank
