@@ -309,7 +309,7 @@
 `define DCACHE_MEM_BYTEEN_WIDTH `DCACHE_LINE_SIZE
 
 // Input request size
-`define DCACHE_NUM_REQS         `NUM_THREADS
+`define DCACHE_NUM_REQS         (`NUM_COMPUTE_UNITS * `NUM_THREADS)
 
 // Memory request tag bits
 `define _DMEM_ADDR_RATIO_W      $clog2(`DCACHE_LINE_SIZE / `DCACHE_WORD_SIZE)
@@ -342,7 +342,7 @@
 `define L2_WORD_SIZE             `L1_BLOCK_SIZE
 
 // Block size in bytes
-`define L2_CACHE_LINE_SIZE       `L2_SHARED_CACHE_LINE_SIZE
+`define L2_CACHE_LINE_SIZE       `L1_CACHE_LINE_SIZE
 
 // Input request tag bits
 `define L2_CORE_TAG_WIDTH        (`DCACHE_CORE_TAG_WIDTH + `CLOG2(`NUM_CORES))

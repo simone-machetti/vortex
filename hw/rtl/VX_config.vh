@@ -401,12 +401,12 @@
 
 // Size of cache in bytes
 `ifndef L2_CACHE_SIZE
-`define L2_CACHE_SIZE `L2_SHARED_CACHE_SIZE
+`define L2_CACHE_SIZE 32'h00004000
 `endif
 
 // Number of banks
 `ifndef L2_NUM_BANKS
-`define L2_NUM_BANKS `L2_SHARED_CACHE_NUM_BANKS
+`define L2_NUM_BANKS 2
 `endif
 
 // Number of ports per bank
