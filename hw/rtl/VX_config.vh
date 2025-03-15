@@ -42,7 +42,7 @@
 `endif
 
 `ifndef MEM_BLOCK_SIZE
-`define MEM_BLOCK_SIZE `L1_CACHE_LINE_SIZE
+`define MEM_BLOCK_SIZE `CACHE_LINE_SIZE
 `endif
 
 `ifndef L1_BLOCK_SIZE
@@ -299,7 +299,7 @@
 
 // Size of cache in bytes
 `ifndef ICACHE_SIZE
-`define ICACHE_SIZE `L1_INSTR_CACHE_SIZE
+`define ICACHE_SIZE `INSTR_CACHE_SIZE
 `endif
 
 // Core Request Queue Size
@@ -331,12 +331,12 @@
 
 // Size of cache in bytes
 `ifndef DCACHE_SIZE
-`define DCACHE_SIZE `L1_DATA_CACHE_SIZE
+`define DCACHE_SIZE `DATA_CACHE_SIZE
 `endif
 
 // Number of banks
 `ifndef DCACHE_NUM_BANKS
-`define DCACHE_NUM_BANKS `L1_DATA_CACHE_NUM_BANKS
+`define DCACHE_NUM_BANKS `DATA_CACHE_NUM_BANKS
 `endif
 
 // Number of ports per bank
