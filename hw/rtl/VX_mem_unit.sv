@@ -94,7 +94,7 @@ module VX_mem_unit # (
         .core_req_rw        (1'b0),
         .core_req_byteen    ('b0),
         .core_req_addr      (icache_req_if.addr),
-        .core_req_data      ('x),
+        .core_req_data      ('0),
         .core_req_tag       (icache_req_if.tag),
         .core_req_ready     (icache_req_if.ready),
 

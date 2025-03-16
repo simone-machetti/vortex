@@ -163,7 +163,7 @@ module VX_tex_mem #(
     assign dcache_req_if.rw     = {NUM_REQS{1'b0}};
     assign dcache_req_if.addr   = req_texel_addr;
     assign dcache_req_if.byteen = {NUM_REQS{4'b0}};
-    assign dcache_req_if.data   = 'x;
+    assign dcache_req_if.data   = '0;
     assign dcache_req_if.tag    = {NUM_REQS{q_req_uuid, `LSU_TAG_ID_BITS'(req_texel_idx), `CACHE_ADDR_TYPE_BITS'(0)}};
 
     // Dcache Response

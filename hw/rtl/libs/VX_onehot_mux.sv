@@ -39,7 +39,7 @@ module VX_onehot_mux #(
         end else begin
             reg [DATAW-1:0] data_out_r;
             always @(*) begin
-                data_out_r = 'x;
+                data_out_r = '0;
                 for (integer i = N-1; i >= 0; --i) begin
                     if (sel_in[i]) begin
                         data_out_r = data_in[i];

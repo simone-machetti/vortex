@@ -202,10 +202,10 @@ module VX_nc_bypass #(
             mem_req_byteen_in_r = 0;
             mem_req_byteen_in_r[0] = core_req_byteen_in_sel;
 
-            mem_req_wsel_in_r = 'x;
+            mem_req_wsel_in_r = '0;
             mem_req_wsel_in_r[0] = req_addr_idx;
 
-            mem_req_data_in_r = 'x;
+            mem_req_data_in_r = '0;
             mem_req_data_in_r[0] = core_req_data_in_sel;
         end
 

@@ -97,7 +97,7 @@ module VX_core_rsp_merge #(
 
                 always @(*) begin
                     core_rsp_valid_unqual  = 0;
-                    core_rsp_data_unqual   = 'x;
+                    core_rsp_data_unqual   = '0;
                     per_bank_core_rsp_sent = 0;
 
                     for (integer i = 0; i < NUM_BANKS; ++i) begin
@@ -136,7 +136,7 @@ module VX_core_rsp_merge #(
 
                 always @(*) begin
                     core_rsp_valid_unqual     = 0;
-                    core_rsp_data_unqual      = 'x;
+                    core_rsp_data_unqual      = '0;
                     per_bank_core_rsp_ready_r = 0;
 
                     for (integer i = 0; i < NUM_BANKS; i++) begin
@@ -198,9 +198,9 @@ module VX_core_rsp_merge #(
 
                 always @(*) begin
                     core_rsp_valid_unqual = '0;
-                    core_rsp_tag_unqual   = 'x;
-                    core_rsp_data_unqual  = 'x;
-                    bank_select_table     = 'x;
+                    core_rsp_tag_unqual   = '0;
+                    core_rsp_data_unqual  = '0;
+                    bank_select_table     = '0;
 
                     for (integer i = NUM_BANKS-1; i >= 0; --i) begin
                         for (integer p = 0; p < NUM_PORTS; ++p) begin
@@ -238,9 +238,9 @@ module VX_core_rsp_merge #(
 
                 always @(*) begin
                     core_rsp_valid_unqual = 0;
-                    core_rsp_tag_unqual   = 'x;
-                    core_rsp_data_unqual  = 'x;
-                    bank_select_table     = 'x;
+                    core_rsp_tag_unqual   = '0;
+                    core_rsp_data_unqual  = '0;
+                    bank_select_table     = '0;
 
                     for (integer i = NUM_BANKS-1; i >= 0; --i) begin
                         if (per_bank_core_rsp_valid[i]) begin
@@ -303,7 +303,7 @@ module VX_core_rsp_merge #(
 
                     core_rsp_tag_unqual = per_bank_core_rsp_tag;
 
-                    core_rsp_data_unqual = 'x;
+                    core_rsp_data_unqual = '0;
                     core_rsp_data_unqual[per_bank_core_rsp_tid] = per_bank_core_rsp_data;
                 end
 
@@ -319,10 +319,10 @@ module VX_core_rsp_merge #(
                     core_rsp_valid_unqual = 0;
                     core_rsp_valid_unqual[per_bank_core_rsp_tid] = per_bank_core_rsp_valid;
 
-                    core_rsp_tag_unqual = 'x;
+                    core_rsp_tag_unqual = '0;
                     core_rsp_tag_unqual[per_bank_core_rsp_tid] = per_bank_core_rsp_tag;
 
-                    core_rsp_data_unqual = 'x;
+                    core_rsp_data_unqual = '0;
                     core_rsp_data_unqual[per_bank_core_rsp_tid] = per_bank_core_rsp_data;
                 end
 

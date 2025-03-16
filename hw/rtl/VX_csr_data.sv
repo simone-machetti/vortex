@@ -121,7 +121,7 @@ module VX_csr_data #(
     reg read_addr_valid_r;
 
     always @(*) begin
-        read_data_r = 'x;
+        read_data_r = '0;
         read_addr_valid_r = 1;
         case (read_addr)
             `CSR_FFLAGS     : read_data_r = 32'(fcsr[read_wid][`FFLAGS_BITS-1:0]);

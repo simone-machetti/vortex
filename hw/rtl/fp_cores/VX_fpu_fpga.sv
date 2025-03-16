@@ -189,10 +189,10 @@ module VX_fpu_fpga #(
 
     always @(*) begin
         per_core_ready_out = 0;
-        has_fflags_n       = 'x;
-        fflags_n           = 'x;
-        result_n           = 'x;
-        tag_out_n          = 'x;
+        has_fflags_n       = '0;
+        fflags_n           = '0;
+        result_n           = '0;
+        tag_out_n          = '0;
         for (integer i = 0; i < NUM_FPC; i++) begin
             if (per_core_valid_out[i]) begin
                 has_fflags_n = per_core_has_fflags[i];

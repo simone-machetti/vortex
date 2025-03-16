@@ -92,8 +92,8 @@ module VX_core_req_bank_sel #(
             wire [NUM_REQS-1:0] core_req_line_match;
 
             always @(*) begin
-                per_bank_line_addr_r = 'x;
-                per_bank_rw_r = 'x;
+                per_bank_line_addr_r = '0;
+                per_bank_rw_r = '0;
                 for (integer i = NUM_REQS-1; i >= 0; --i) begin
                     if (core_req_valid[i]) begin
                         per_bank_line_addr_r[core_req_bid[i]] = core_req_line_addr[i];
@@ -114,14 +114,14 @@ module VX_core_req_bank_sel #(
                 always @(*) begin
                     per_bank_core_req_valid_r = 0;
                     per_bank_core_req_pmask_r = 0;
-                    per_bank_core_req_rw_r    = 'x;
-                    per_bank_core_req_addr_r  = 'x;
-                    per_bank_core_req_wsel_r  = 'x;
-                    per_bank_core_req_byteen_r= 'x;
-                    per_bank_core_req_data_r  = 'x;
-                    per_bank_core_req_tag_r   = 'x;
-                    per_bank_core_req_tid_r   = 'x;
-                    req_select_table_r        = 'x;
+                    per_bank_core_req_rw_r    = '0;
+                    per_bank_core_req_addr_r  = '0;
+                    per_bank_core_req_wsel_r  = '0;
+                    per_bank_core_req_byteen_r= '0;
+                    per_bank_core_req_data_r  = '0;
+                    per_bank_core_req_tag_r   = '0;
+                    per_bank_core_req_tid_r   = '0;
+                    req_select_table_r        = '0;
 
                     for (integer i = NUM_REQS-1; i >= 0; --i) begin
                         if (core_req_valid[i]) begin
@@ -152,13 +152,13 @@ module VX_core_req_bank_sel #(
                 always @(*) begin
                     per_bank_core_req_valid_r = 0;
                     per_bank_core_req_pmask_r = 0;
-                    per_bank_core_req_rw_r    = 'x;
-                    per_bank_core_req_addr_r  = 'x;
-                    per_bank_core_req_wsel_r  = 'x;
-                    per_bank_core_req_byteen_r= 'x;
-                    per_bank_core_req_data_r  = 'x;
-                    per_bank_core_req_tag_r   = 'x;
-                    per_bank_core_req_tid_r   = 'x;
+                    per_bank_core_req_rw_r    = '0;
+                    per_bank_core_req_addr_r  = '0;
+                    per_bank_core_req_wsel_r  = '0;
+                    per_bank_core_req_byteen_r= '0;
+                    per_bank_core_req_data_r  = '0;
+                    per_bank_core_req_tag_r   = '0;
+                    per_bank_core_req_tid_r   = '0;
 
                     for (integer i = NUM_REQS-1; i >= 0; --i) begin
                         if (core_req_valid[i]) begin
@@ -187,13 +187,13 @@ module VX_core_req_bank_sel #(
 
             always @(*) begin
                 per_bank_core_req_valid_r = 0;
-                per_bank_core_req_rw_r    = 'x;
-                per_bank_core_req_addr_r  = 'x;
-                per_bank_core_req_wsel_r  = 'x;
-                per_bank_core_req_byteen_r= 'x;
-                per_bank_core_req_data_r  = 'x;
-                per_bank_core_req_tag_r   = 'x;
-                per_bank_core_req_tid_r   = 'x;
+                per_bank_core_req_rw_r    = '0;
+                per_bank_core_req_addr_r  = '0;
+                per_bank_core_req_wsel_r  = '0;
+                per_bank_core_req_byteen_r= '0;
+                per_bank_core_req_data_r  = '0;
+                per_bank_core_req_tag_r   = '0;
+                per_bank_core_req_tid_r   = '0;
 
                 for (integer i = NUM_REQS-1; i >= 0; --i) begin
                     if (core_req_valid[i]) begin
@@ -233,13 +233,13 @@ module VX_core_req_bank_sel #(
         if (NUM_BANKS > 1) begin
             always @(*) begin
                 per_bank_core_req_valid_r = 0;
-                per_bank_core_req_rw_r    = 'x;
-                per_bank_core_req_addr_r  = 'x;
-                per_bank_core_req_wsel_r  = 'x;
-                per_bank_core_req_byteen_r= 'x;
-                per_bank_core_req_data_r  = 'x;
-                per_bank_core_req_tag_r   = 'x;
-                per_bank_core_req_tid_r   = 'x;
+                per_bank_core_req_rw_r    = '0;
+                per_bank_core_req_addr_r  = '0;
+                per_bank_core_req_wsel_r  = '0;
+                per_bank_core_req_byteen_r= '0;
+                per_bank_core_req_data_r  = '0;
+                per_bank_core_req_tag_r   = '0;
+                per_bank_core_req_tid_r   = '0;
                 per_bank_core_req_valid_r[core_req_bid[0]]  = core_req_valid;
                 per_bank_core_req_rw_r[core_req_bid[0]]     = core_req_rw;
                 per_bank_core_req_addr_r[core_req_bid[0]]   = core_req_line_addr;

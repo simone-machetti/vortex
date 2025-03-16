@@ -220,8 +220,8 @@ module VX_rr_arbiter #(
         reg [NUM_REQS-1:0]      state;
 
         always @(*) begin
-            grant_index_r  = 'x;
-            grant_onehot_r = 'x;
+            grant_index_r  = '0;
+            grant_onehot_r = '0;
             for (integer i = 0; i < NUM_REQS; ++i) begin
                 for (integer j = 0; j < NUM_REQS; ++j) begin
                     if (state[i] && requests[(j + 1) % NUM_REQS]) begin

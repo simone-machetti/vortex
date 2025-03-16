@@ -148,7 +148,7 @@ module VX_fp_ncomp #(
                 case (frm_s0) // use LSB to distinguish MIN and MAX
                     3: fminmax_res[i] = a_smaller_s0[i] ? dataa_s0[i] : datab_s0[i];
                     4: fminmax_res[i] = a_smaller_s0[i] ? datab_s0[i] : dataa_s0[i];
-              default: fminmax_res[i] = 'x;  // don't care value
+              default: fminmax_res[i] = '0;  // don't care value
                 endcase
             end
         end
@@ -162,7 +162,7 @@ module VX_fp_ncomp #(
                 0: fsgnj_res[i] = { b_sign_s0[i], a_exponent_s0[i], a_mantissa_s0[i]};
                 1: fsgnj_res[i] = {~b_sign_s0[i], a_exponent_s0[i], a_mantissa_s0[i]};
                 2: fsgnj_res[i] = { a_sign_s0[i] ^ b_sign_s0[i], a_exponent_s0[i], a_mantissa_s0[i]};
-          default: fsgnj_res[i] = 'x;  // don't care value
+          default: fsgnj_res[i] = '0;  // don't care value
             endcase
         end
     end
@@ -201,8 +201,8 @@ module VX_fp_ncomp #(
                     end
                 end
                 default: begin
-                    fcmp_res[i]    = 'x;
-                    fcmp_fflags[i] = 'x;
+                    fcmp_res[i]    = '0;
+                    fcmp_fflags[i] = '0;
                 end
             endcase
         end
@@ -218,7 +218,7 @@ module VX_fp_ncomp #(
             case (op_type_s0)
                 `INST_FPU_CLASS: begin
                     tmp_result[i] = fclass_mask[i];
-                    tmp_fflags[i] = 'x;
+                    tmp_fflags[i] = '0;
                 end
                 `INST_FPU_CMP: begin
                     tmp_result[i] = fcmp_res[i];
@@ -229,7 +229,7 @@ module VX_fp_ncomp #(
                     case (frm_s0)
                         0,1,2: begin
                             tmp_result[i] = fsgnj_res[i];
-                            tmp_fflags[i] = 'x;
+                            tmp_fflags[i] = '0;
                         end
                         3,4: begin
                             tmp_result[i] = fminmax_res[i];
@@ -239,7 +239,7 @@ module VX_fp_ncomp #(
                         //5,6,7: MOVE
                         default: begin
                             tmp_result[i] = dataa_s0[i];
-                            tmp_fflags[i] = 'x;
+                            tmp_fflags[i] = '0;
                         end
                     endcase
                 end

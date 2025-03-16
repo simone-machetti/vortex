@@ -34,7 +34,7 @@ module VX_onehot_encoder #(
 
         // base case, also handle padding for non-power of two inputs
         assign v[0] = REVERSE ? (data_in << (aligned_width_lp - N)) : ((aligned_width_lp)'(data_in));
-        assign addr[0] = 'x;
+        assign addr[0] = '0;
 
         for (genvar level = 1; level < levels_lp+1; level=level+1) begin
             localparam segments_lp      = 2**(levels_lp-level);
@@ -81,7 +81,7 @@ module VX_onehot_encoder #(
 
         if (REVERSE) begin
             always @(*) begin
-                index_r = 'x;
+                index_r = '0;
                 for (integer i = N-1; i >= 0; --i) begin
                     if (data_in[i]) begin
                         index_r = `LOG2UP(N)'(i);
@@ -90,7 +90,7 @@ module VX_onehot_encoder #(
             end
         end else begin
             always @(*) begin
-                index_r = 'x;
+                index_r = '0;
                 for (integer i = 0; i < N; i++) begin
                     if (data_in[i]) begin
                         index_r = `LOG2UP(N)'(i);

@@ -92,8 +92,8 @@ module VX_priority_encoder #(
         reg [N-1:0]  onehot_r;
 
         always @(*) begin
-            index_r  = 'x;
-            onehot_r = 'x;
+            index_r  = '0;
+            onehot_r = '0;
             for (integer i = N-1; i >= 0; --i) begin
                 if (reversed[i]) begin
                     index_r     = LN'(i);

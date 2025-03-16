@@ -226,7 +226,7 @@ module VX_shared_mem #(
 
     always @(*) begin
         core_rsp_valids_in = 0;
-        core_rsp_data_in   = 'x;
+        core_rsp_data_in   = '0;
         bank_rsp_sel_n     = bank_rsp_sel_r;
         for (integer i = 0; i < NUM_BANKS; i++) begin
             if (core_req_read_mask[i]

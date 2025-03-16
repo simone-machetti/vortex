@@ -69,13 +69,13 @@ module VX_decode  #(
     always @(*) begin
 
         ex_type   = 0;
-        op_type   = 'x;
+        op_type   = '0;
         op_mod    = 0;
         rd_r      = 0;
         rs1_r     = 0;
         rs2_r     = 0;
         rs3_r     = 0;
-        imm       = 'x;
+        imm       = '0;
         use_imm   = 0;
         use_PC    = 0;
         use_rd    = 0;

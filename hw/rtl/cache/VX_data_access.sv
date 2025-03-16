@@ -59,7 +59,7 @@ module VX_data_access #(
             reg [`WORDS_PER_LINE-1:0][WORD_SIZE-1:0] wren_r;
             if (NUM_PORTS > 1) begin
                 always @(*) begin
-                    wdata_r = 'x;
+                    wdata_r = '0;
                     wren_r  = 0;
                     for (integer i = 0; i < NUM_PORTS; ++i) begin
                         if (pmask[i]) begin

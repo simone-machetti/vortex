@@ -184,7 +184,7 @@ module VX_cache #(
 
             always @(*) begin
                 mem_req_byteen_r = 0;
-                mem_req_data_r   = 'x;
+                mem_req_data_r   = '0;
                 for (integer i = 0; i < NUM_PORTS; ++i) begin
                     if ((1 == NUM_PORTS) || mem_req_pmask_p[i]) begin
                         mem_req_byteen_r[mem_req_wsel_p[i] * WORD_SIZE +: WORD_SIZE] = mem_req_byteen_p[i];
@@ -211,8 +211,8 @@ module VX_cache #(
         `UNUSED_VAR (mem_req_rw_p)
 
         assign mem_req_rw_sb     = 0;
-        assign mem_req_byteen_sb = 'x;
-        assign mem_req_data_sb   = 'x;
+        assign mem_req_byteen_sb = '0;
+        assign mem_req_data_sb   = '0;
     end
 
     ///////////////////////////////////////////////////////////////////////////
