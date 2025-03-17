@@ -4,38 +4,53 @@ module VX_ipdom_stack #(
     parameter WIDTH = 1,
     parameter DEPTH = 1
 ) (
-    input  wire               clk,
-    input  wire               reset,
-    input  wire               pair,
-    input  wire [WIDTH - 1:0] q1,
-    input  wire [WIDTH - 1:0] q2,
-    output wire [WIDTH - 1:0] d,
-    input  wire               push,
-    input  wire               pop,
-    output wire               index,
-    output wire               empty,
-    output wire               full
+    input  logic               clk,
+    input  logic               reset,
+    input  logic               pair,
+    input  logic [WIDTH - 1:0] q1,
+    input  logic [WIDTH - 1:0] q2,
+    output logic [WIDTH - 1:0] d,
+    input  logic               push,
+    input  logic               pop,
+    output logic               index,
+    output logic               empty,
+    output logic               full
 );
     localparam ADDRW = $clog2(DEPTH);
 
-    reg is_part [DEPTH-1:0];
+    logic curr_is_part [DEPTH-1:0];
+    logic next_is_part [DEPTH-1:0];
 
-    reg [ADDRW-1:0] rd_ptr, wr_ptr;
+    logic [ADDRW-1:0] curr_rd_ptr;
+    logic [ADDRW-1:0] next_rd_ptr;
+    logic [ADDRW-1:0] curr_wr_ptr;
+    logic [ADDRW-1:0] next_wr_ptr;
 
-    wire [WIDTH-1:0] d1, d2;
+    logic [WIDTH-1:0] d1;
+    logic [WIDTH-1:0] d2;
 
-    always @(posedge clk) begin
+    always_ff @(posedge clk) begin
         if (reset) begin
-            rd_ptr <= 0;
-            wr_ptr <= 0;
-        end else begin
-            if (push) begin
-                rd_ptr <= wr_ptr;
-                wr_ptr <= wr_ptr + ADDRW'(1);
-            end else if (pop) begin
-                wr_ptr <= wr_ptr - ADDRW'(is_part[rd_ptr]);
-                rd_ptr <= rd_ptr - ADDRW'(is_part[rd_ptr]);
-            end
+            curr_rd_ptr <= '0;
+            curr_wr_ptr <= '0;
+        end
+        else begin
+            curr_rd_ptr <= next_rd_ptr;
+            curr_wr_ptr <= next_wr_ptr;
+        end
+    end
+
+    always_comb begin
+        if (push) begin
+            next_rd_ptr = curr_wr_ptr;
+            next_wr_ptr = curr_wr_ptr + {ADDRW{1}};
+        end else if (pop) begin
+            next_rd_ptr = curr_rd_ptr - {ADDRW{curr_is_part[curr_rd_ptr]}};
+            next_wr_ptr = curr_wr_ptr - {ADDRW{curr_is_part[curr_rd_ptr]}};
+        end
+        else begin
+            next_rd_ptr = curr_rd_ptr;
+            next_wr_ptr = curr_wr_ptr;
         end
     end
 
@@ -47,23 +62,36 @@ module VX_ipdom_stack #(
         .clk_i   (clk),
         .rst_ni  (~reset),
         .wren_i  (push),
-        .waddr_i (wr_ptr),
+        .waddr_i (curr_wr_ptr),
         .wdata_i ({q2, q1}),
-        .raddr_i (rd_ptr),
+        .raddr_i (curr_rd_ptr),
         .rdata_o ({d2, d1})
     );
 
-    always @(posedge clk) begin
-        if (push) begin
-            is_part[wr_ptr] <= ~pair;
-        end else if (pop) begin
-            is_part[rd_ptr] <= 1;
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            for (int i = 0; i < DEPTH; i++) begin
+                curr_is_part[i] <= 1'b0;
+            end
+        end
+        else begin
+            curr_is_part <= next_is_part;
         end
     end
 
-    assign index = is_part[rd_ptr];
+    always_comb begin
+        next_is_part = curr_is_part;
+        if (push) begin
+            next_is_part[curr_wr_ptr] = ~pair;
+        end
+        if (pop) begin
+            next_is_part[curr_rd_ptr] = 1;
+        end
+    end
+
+    assign index = curr_is_part[curr_rd_ptr];
     assign d     = index ? d1 : d2;
-    assign empty = (ADDRW'(0) == wr_ptr);
-    assign full  = (ADDRW'(DEPTH-1) == wr_ptr);
+    assign empty = (ADDRW'(0) == curr_wr_ptr);
+    assign full  = (ADDRW'(DEPTH-1) == curr_wr_ptr);
 
 endmodule
