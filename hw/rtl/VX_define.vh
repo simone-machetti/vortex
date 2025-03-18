@@ -342,7 +342,7 @@
 `define L2_WORD_SIZE             `L1_BLOCK_SIZE
 
 // Block size in bytes
-`define L2_CACHE_LINE_SIZE       `CACHE_LINE_SIZE
+`define L2_CACHE_LINE_SIZE       (`NUM_THREADS * 4)
 
 // Input request tag bits
 `define L2_CORE_TAG_WIDTH        (`DCACHE_CORE_TAG_WIDTH + `CLOG2(`NUM_CORES))

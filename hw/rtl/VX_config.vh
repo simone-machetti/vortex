@@ -42,7 +42,7 @@
 `endif
 
 `ifndef MEM_BLOCK_SIZE
-`define MEM_BLOCK_SIZE `CACHE_LINE_SIZE
+`define MEM_BLOCK_SIZE (`NUM_THREADS * 4)
 `endif
 
 `ifndef L1_BLOCK_SIZE
@@ -336,7 +336,7 @@
 
 // Number of banks
 `ifndef DCACHE_NUM_BANKS
-`define DCACHE_NUM_BANKS `DATA_CACHE_NUM_BANKS
+`define DCACHE_NUM_BANKS `NUM_COMPUTE_UNITS
 `endif
 
 // Number of ports per bank
