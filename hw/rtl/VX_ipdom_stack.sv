@@ -43,10 +43,10 @@ module VX_ipdom_stack #(
     always_comb begin
         if (push) begin
             next_rd_ptr = curr_wr_ptr;
-            next_wr_ptr = curr_wr_ptr + {ADDRW{1}};
+            next_wr_ptr = curr_wr_ptr + ADDRW'(1);
         end else if (pop) begin
-            next_rd_ptr = curr_rd_ptr - {ADDRW{curr_is_part[curr_rd_ptr]}};
-            next_wr_ptr = curr_wr_ptr - {ADDRW{curr_is_part[curr_rd_ptr]}};
+            next_rd_ptr = curr_rd_ptr - ADDRW'(curr_is_part[curr_rd_ptr]);
+            next_wr_ptr = curr_wr_ptr - ADDRW'(curr_is_part[curr_rd_ptr]);
         end
         else begin
             next_rd_ptr = curr_rd_ptr;
