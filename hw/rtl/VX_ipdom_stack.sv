@@ -43,10 +43,10 @@ module VX_ipdom_stack #(
     always_comb begin
         if (push) begin
             next_rd_ptr = curr_wr_ptr;
-            next_wr_ptr = curr_wr_ptr + ADDRW'(1);
+            next_wr_ptr = curr_wr_ptr + {{(ADDRW-1){1'b0}}, 1'b1};
         end else if (pop) begin
-            next_rd_ptr = curr_rd_ptr - ADDRW'(curr_is_part[curr_rd_ptr]);
-            next_wr_ptr = curr_wr_ptr - ADDRW'(curr_is_part[curr_rd_ptr]);
+            next_rd_ptr = curr_rd_ptr - {{(ADDRW-1){1'b0}}, curr_is_part[curr_rd_ptr]};
+            next_wr_ptr = curr_wr_ptr - {{(ADDRW-1){1'b0}}, curr_is_part[curr_rd_ptr]};
         end
         else begin
             next_rd_ptr = curr_rd_ptr;
@@ -91,7 +91,7 @@ module VX_ipdom_stack #(
 
     assign index = curr_is_part[curr_rd_ptr];
     assign d     = index ? d1 : d2;
-    assign empty = (ADDRW'(0) == curr_wr_ptr);
-    assign full  = (ADDRW'(DEPTH-1) == curr_wr_ptr);
+    assign empty = (curr_wr_ptr == '0);
+    assign full  = (curr_wr_ptr == (DEPTH - 1));
 
 endmodule
