@@ -259,7 +259,7 @@
 `define ICACHE_WORD_SIZE        4
 
 // Block size in bytes
-`define ICACHE_LINE_SIZE        `L1_BLOCK_SIZE
+`define ICACHE_LINE_SIZE        16
 
 // TAG sharing enable
 `define ICACHE_CORE_TAG_ID_BITS `NW_BITS
